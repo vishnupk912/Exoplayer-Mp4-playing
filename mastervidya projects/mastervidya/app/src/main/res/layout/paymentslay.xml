@@ -4,61 +4,91 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_margin="@dimen/ts12"
-
+    android:elevation="@dimen/ts4"
+    android:id="@+id/lay"
+    android:background="@drawable/etshape"
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/nametv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Vishnu PK"
         android:textColor="@color/black"
         android:fontFamily="@font/poppinsregular"
         android:textSize="@dimen/sp16"
+        android:layout_marginLeft="@dimen/ts12"
+        android:layout_marginTop="@dimen/ts12"
         />
 
     <TextView
+        android:id="@+id/classtv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Standard 1"
         android:textColor="@color/black"
         android:fontFamily="@font/poppinsregular"
         android:textSize="@dimen/sp16"
+        android:layout_marginLeft="@dimen/ts12"
+
         />
     <TextView
+        android:id="@+id/boardtv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CBSE"
         android:textColor="@color/black"
         android:fontFamily="@font/poppinsregular"
         android:textSize="@dimen/sp16"
+        android:layout_marginLeft="@dimen/ts12"
+
         />
 
     <TextView
+        android:id="@+id/paymentstatustv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Online Payment"
         android:textColor="@color/black"
         android:fontFamily="@font/poppinsregular"
         android:textSize="@dimen/sp16"
+        android:layout_marginLeft="@dimen/ts12"
+
         />
 
     <TextView
+        android:id="@+id/subscriptionstv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Yearly Subscription"
         android:textColor="@color/black"
         android:fontFamily="@font/poppinsregular"
         android:textSize="@dimen/sp16"
+        android:layout_marginLeft="@dimen/ts12"
+
         />
 
     <TextView
+        android:id="@+id/amounttv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rs 1000"
         android:textColor="@color/black"
         android:fontFamily="@font/poppinsregular"
         android:textSize="@dimen/sp16"
+        android:layout_marginLeft="@dimen/ts12"
+
         />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:layout_margin="@dimen/ts12"
+        />
+
+
     
 
 

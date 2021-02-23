@@ -24,6 +24,7 @@ public class Url
     public  static  final String subclass=base_url1+"sub_classes";
     public  static  final String dashboard=base_url1+"dashboard";
     public  static  final String special_study=base_url1+"special_study";
+    public  static  final String subscriptions=base_url1+"subscriptions";
 
 
 
