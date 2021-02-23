@@ -62,10 +62,7 @@
                         android:textSize="@dimen/sp16"
                         android:padding="@dimen/ts4"
                         android:fontFamily="@font/poppinsmedium"
-                        android:text="Vishnu PK"
                         android:textColor="@color/black"/>
-
-
 
                 </LinearLayout>
 

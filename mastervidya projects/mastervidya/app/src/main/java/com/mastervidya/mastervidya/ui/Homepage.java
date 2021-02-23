@@ -154,13 +154,14 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
 
         View header = nav_view.getHeaderView(0);
 
+        TextView tvNav1;
         LinearLayout chatlay,signoutlay,myprofile;
         ImageView imgNav;
         chatlay=header.findViewById(R.id.chatlay);
         signoutlay=header.findViewById(R.id.signoutlay);
         imgNav=header.findViewById(R.id.imgNav);
         myprofile=header.findViewById(R.id.myprofile);
-
+        tvNav1=header.findViewById(R.id.tvNav1);
         myprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,6 +175,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                 .load(avatar_image)
                 .centerCrop()
                 .into(imgNav);
+        tvNav1.setText(name);
 
         signoutlay.setOnClickListener(new View.OnClickListener() {
             @Override

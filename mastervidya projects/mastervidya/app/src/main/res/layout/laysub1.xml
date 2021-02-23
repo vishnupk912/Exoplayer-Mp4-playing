@@ -19,6 +19,7 @@
             android:layout_height="@dimen/cat"
             android:src="@drawable/logo1"
             app:riv_corner_radius="@dimen/ts48"
+
             />
 
         <TextView
