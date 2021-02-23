@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/ts12"
+    android:background="@drawable/buttonshape9"
+    android:layout_width="@dimen/img6"
+    android:gravity="center"
+    android:layout_height="@dimen/img6">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ts48"
+        android:gravity="right|center_vertical"
+        >
+        <ImageView
+            android:layout_width="@dimen/ts32"
+            android:layout_height="@dimen/ts32"
+            android:src="@drawable/ic_arrow"
+            android:layout_marginRight="@dimen/ts13"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/ts48"
+        android:layout_height="@dimen/ts48"
+        android:src="@drawable/circlelogo"
+        android:layout_marginBottom="@dimen/ts13"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AGENT VERIFICATION"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppinsmedium"
+        android:textSize="@dimen/sp16"
+        />
+
+
+   <EditText
+       android:id="@+id/et"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/ts48"
+       android:background="@drawable/etshape"
+       android:layout_margin="@dimen/ts12"
+       android:hint="Enter Agent Unique Code"
+       android:paddingLeft="@dimen/ts12"
+       android:fontFamily="@font/poppinsregular"
+       android:ellipsize="end"
+       android:singleLine="true"
+       android:textSize="@dimen/sp16"
+       />
+
+    <EditText
+        android:visibility="gone"
+        android:id="@+id/et1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ts48"
+        android:background="@drawable/etshape"
+        android:layout_margin="@dimen/ts12"
+        android:hint="Please Ask OTP from Agent "
+        android:paddingLeft="@dimen/ts12"
+        android:fontFamily="@font/poppinsregular"
+        android:ellipsize="end"
+        android:inputType="number"
+        android:singleLine="true"
+        android:textSize="@dimen/sp16"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/submitlay"
+        android:layout_width="@dimen/img"
+        android:layout_height="@dimen/ts40"
+        android:background="@drawable/buttonshape1"
+        android:layout_marginTop="@dimen/ts13"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SUBMIT"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp16"
+            android:fontFamily="@font/poppinsregular"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/verfiyotplay"
+        android:visibility="gone"
+        android:layout_width="@dimen/img"
+        android:layout_height="@dimen/ts40"
+        android:background="@drawable/buttonshape1"
+        android:layout_marginTop="@dimen/ts13"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VERIFY OTP"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp16"
+            android:fontFamily="@font/poppinsregular"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

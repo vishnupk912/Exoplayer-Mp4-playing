@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="@dimen/img6"
+    android:layout_margin="@dimen/ts4"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cat1"
+        android:background="@drawable/buttonshape6"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="@dimen/ts24"
+            android:layout_height="@dimen/ts24"
+            android:src="@drawable/logo"
+            android:layout_gravity="center"
+            android:elevation="@dimen/ts12"
+            />
+        <TextView
+            android:id="@+id/tvhead_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:padding="@dimen/ts4"
+            android:layout_marginTop="@dimen/ts4"
+            android:textAlignment="center"
+            android:textSize="@dimen/ts12"
+            android:text="Session Out"
+            android:fontFamily="@font/poppinssemibold"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/buttonshape5"
+        >
+        <TextView
+            android:id="@+id/tv1_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:padding="@dimen/ts8"
+            android:text="Your Account has been logged in from another device ."
+            android:layout_marginTop="@dimen/ts8"
+            android:textAlignment="center"
+            android:textSize="@dimen/ts12"
+            android:fontFamily="@font/poppinsregular"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_marginLeft="@dimen/ts12"
+            android:layout_marginRight="@dimen/ts12"
+            android:layout_marginTop="@dimen/ts12"
+            android:layout_marginBottom="@dimen/ts12"
+            android:layout_gravity="center"
+            android:elevation="@dimen/ts4"
+            >
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/cancelid"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ts40"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginRight="@dimen/ts4"
+                android:elevation="@dimen/ts4"
+                android:layout_margin="@dimen/ts4"
+                >
+                <TextView
+                    android:id="@+id/tv3id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppinsregular"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/okid"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ts40"
+                android:layout_weight="1"
+                android:background="@drawable/buttonshape1"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/ts4"
+                android:layout_margin="@dimen/ts4"
+                android:elevation="@dimen/ts4"
+
+                >
+                <TextView
+                    android:id="@+id/tv4id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="OK"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppinsregular"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

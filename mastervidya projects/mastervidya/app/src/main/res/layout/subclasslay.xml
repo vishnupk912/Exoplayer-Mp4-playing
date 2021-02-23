@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_margin="@dimen/ts8"
+    android:elevation="@dimen/ts2"
+    android:background="@drawable/etshape"
+    android:id="@+id/lay"
+    android:gravity="center_vertical"
+    android:layout_height="@dimen/cat">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:id="@+id/classsnametv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STANDARD 1"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppinsregular"
+            android:layout_marginLeft="@dimen/ts12"
+            android:textSize="@dimen/sp16"
+            />
+        <TextView
+            android:id="@+id/childnametv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="For Rahul"
+            android:textColor="@color/grey11"
+            android:fontFamily="@font/poppinsregular"
+            android:layout_marginLeft="@dimen/ts12"
+            android:textSize="@dimen/sp12"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/ts16"
+        android:background="@drawable/sheetshape11"
+        >
+        <TextView
+            android:id="@+id/boardnametv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CBSE"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppinsregular"
+            android:textSize="@dimen/sp14"
+            android:paddingTop="@dimen/ts2"
+            android:paddingBottom="@dimen/ts2"
+            android:paddingLeft="@dimen/ts8"
+            android:paddingRight="@dimen/ts8"
+            />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:CircleProgressView="http://schemas.android.com/apk/res-auto"    android:orientation="vertical"
+    android:id="@+id/ll_parent_container"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:id="@+id/frame_layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.exoplayer2.ui.PlayerView
+                android:id="@+id/player_view"
+                app:controller_layout_id="@layout/online_player_custom_control"
+                app:hide_on_touch="true"
+                app:resize_mode="fill"
+                app:keep_content_on_player_reset="false"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/img6"/>
+
+            <ProgressBar
+                android:id="@+id/loading_exoplayer"
+                android:layout_width="@dimen/ts48"
+                android:layout_height="@dimen/ts48"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ts12"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Work,time and Distance"
+            android:fontFamily="@font/poppinsmedium"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/ts12"
+            android:layout_marginTop="@dimen/ts4"
+            android:textSize="@dimen/sp16"
+            />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="English | Chapter 1"
+                android:fontFamily="@font/poppinsregular"
+                android:textColor="@color/grey11"
+                android:layout_marginLeft="@dimen/ts12"
+                android:textSize="@dimen/sp12"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            >
+            <ImageView
+                android:layout_width="@dimen/ts32"
+                android:layout_height="@dimen/ts32"
+                android:src="@drawable/download"
+                android:padding="@dimen/ts4"
+                android:layout_marginRight="@dimen/ts20"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>
+
+

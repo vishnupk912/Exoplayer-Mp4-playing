@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/cat"
+    android:layout_margin="@dimen/ts12"
+    android:background="@drawable/buttonshape2"
+    android:gravity="center"
+    android:layout_height="@dimen/cat">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/cat1"
+        android:layout_height="@dimen/cat1"
+        android:src="@drawable/logo1"
+        />
+
+</LinearLayout>
