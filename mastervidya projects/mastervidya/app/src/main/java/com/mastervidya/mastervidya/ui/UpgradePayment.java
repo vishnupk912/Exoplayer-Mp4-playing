@@ -157,10 +157,9 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 
 
         Intent intent=getIntent();
-
-            classid =intent.getStringExtra("classid");
-            classname =intent.getStringExtra("classname");
-            board = intent.getStringExtra("board");
+        classid =intent.getStringExtra("classid");
+        classname =intent.getStringExtra("classname");
+        board = intent.getStringExtra("board");
 
         boardtv.setText(board);
         classtv.setText(classname);

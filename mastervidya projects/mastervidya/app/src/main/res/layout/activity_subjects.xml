@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/backchap"
+    android:background="@drawable/specialstudycorner4"
     android:id="@+id/lay_main"
     tools:context=".Subjects"
     >
@@ -47,7 +47,7 @@
         android:layout_marginBottom="@dimen/ts12"
         android:overScrollMode="never"
         tools:listitem="@layout/laysub1"
-        android:layout_marginTop="@dimen/cat"
+        android:layout_marginTop="@dimen/img2"
         />
 
 </LinearLayout>

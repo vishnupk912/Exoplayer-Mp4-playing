@@ -181,4 +181,9 @@ public class TransactionActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(TransactionActivity.this,MyClass.class);
+        startActivity(intent);
+    }
 }

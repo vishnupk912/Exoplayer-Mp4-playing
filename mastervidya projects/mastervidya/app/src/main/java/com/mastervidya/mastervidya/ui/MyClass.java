@@ -217,4 +217,10 @@ public class MyClass extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(MyClass.this,Homepage.class);
+        startActivity(intent);
+    }
 }
