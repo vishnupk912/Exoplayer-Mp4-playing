@@ -80,7 +80,7 @@ public class MyClass extends AppCompatActivity {
         addlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MyClass.this,AddClass.class);
+                Intent intent=new Intent(MyClass.this,AddClass1.class);
                 startActivity(intent);
             }
         });

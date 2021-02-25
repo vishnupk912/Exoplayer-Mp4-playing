@@ -10,7 +10,7 @@
 
         />
     <corners
-        android:bottomRightRadius="@dimen/ts48"
+        android:radius="@dimen/ts48"
         android:topRightRadius="@dimen/ts48"
 
         />

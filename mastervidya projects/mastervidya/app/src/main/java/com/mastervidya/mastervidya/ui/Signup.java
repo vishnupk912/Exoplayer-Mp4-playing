@@ -299,7 +299,6 @@ public class Signup extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject jsonObject)
                     {
-                        Toast.makeText(Signup.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
 
                         dialog_progress.dismiss();
                         try {

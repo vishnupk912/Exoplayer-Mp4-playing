@@ -114,7 +114,6 @@ public class SpecialStudy extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject jsonObject)
                     {
-                        Toast.makeText(SpecialStudy.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
                         dialog_progress.dismiss();
                         try {
                             String status=jsonObject.getString("status");

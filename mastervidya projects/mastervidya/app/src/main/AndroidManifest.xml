@@ -33,7 +33,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.UpgradePayment"></activity>
+        <activity android:name=".ui.PaymentPage"></activity>
+        <activity android:name=".ui.AddClass1" />
+        <activity android:name=".ui.UpgradePayment" />
         <activity android:name=".ui.Payments" />
         <activity android:name=".ui.SpecialStudy" />
         <activity android:name=".ui.ClasseViewActivity" />
@@ -68,6 +70,10 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             tools:ignore="LockedOrientationActivity" />
+
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_xOKvcKnhNOcUOg" />
     </application>
 
 </manifest>

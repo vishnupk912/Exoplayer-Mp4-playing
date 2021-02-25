@@ -151,16 +151,15 @@ public class TransactionActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject jsonObject)
             {
-                Toast.makeText(TransactionActivity.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
                 Log.d("data",jsonObject.toString());
                 try {
                     String status=jsonObject.getString("status");
                     if(status.contains("success"))
                     {
+
                         tv_status.setText("Your payment has been sucessfully completed");
                         lottieAnimationView.setAnimation("success.json");
                         myclasslay.setVisibility(View.VISIBLE);
-
 
                     }
                     else

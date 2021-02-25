@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -54,6 +55,7 @@ public class OtpPage extends AppCompatActivity {
     RequestQueue requestQueue;
     LinearLayout lay_main;
     SessionHandler sessionHandler;
+    TextView tv1;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -66,7 +68,8 @@ public class OtpPage extends AppCompatActivity {
         Intent intent=getIntent();
         phone=intent.getStringExtra("phone");
         etOTP1.requestFocus();
-
+        tv1=findViewById(R.id.tv1);
+        tv1.setText("We'll text you on "+phone);
 
 
         final StringBuilder sb = new StringBuilder();
@@ -341,7 +344,6 @@ public class OtpPage extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject jsonObject)
                     {
-                        Toast.makeText(OtpPage.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
 
                         dialog_progress.dismiss();
                         try {

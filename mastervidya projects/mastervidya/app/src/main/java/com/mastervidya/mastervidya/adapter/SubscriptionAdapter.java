@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -23,6 +25,7 @@ import com.mastervidya.mastervidya.ui.Payments;
 import com.mastervidya.mastervidya.ui.UpgradePayment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapter.ViewHolder>
 {
@@ -56,7 +59,9 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
         String paymentstatus=paymentmodelArrayList.get(position).getPayment_type();
         String subscriptiontype=paymentmodelArrayList.get(position).getSubscription_type();
         String amount=paymentmodelArrayList.get(position).getAmount();
+        String date=paymentmodelArrayList.get(position).getDate();
 
+        holder.datetv.setText("Enrolled Date : "+date);
         holder.nametv.setText("Name : "+name);
         holder.classtv.setText("Class : "+classs);
         if(paymentstatus.contains("1"))
@@ -88,12 +93,23 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
                 intent.putExtra("classid",classs_id);
                 intent.putExtra("board",board);
                 intent.putExtra("classname",classs);
+                intent.putExtra("name",name);
+
                 context.startActivity(intent);
-
-
 
             }
         });
+
+        ArrayList<HashMap<String,String>> hashMapArrayList=new ArrayList<>();
+        HashMap<String,String> hashMap=new HashMap<>();
+        hashMap.put("month",subscibemonthsModelArrayList.get(position).getMonth());
+        hashMap.put("year",subscibemonthsModelArrayList.get(position).getYear());
+        hashMapArrayList.add(hashMap);
+
+        SubscriptionMonthsAdapter adapter = new SubscriptionMonthsAdapter(hashMapArrayList, context);
+        holder.rvid.setHasFixedSize(true);
+        holder.rvid.setLayoutManager(new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false));
+        holder.rvid.setAdapter(adapter);
     }
 
     @Override
@@ -103,12 +119,13 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView nametv,classtv,boardtv,paymentstatustv,subscriptionstv,amounttv;
+        TextView nametv,classtv,boardtv,paymentstatustv,subscriptionstv,amounttv,datetv;
         RecyclerView rvid;
         LinearLayout lay;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            datetv=itemView.findViewById(R.id.datetv);
             nametv=itemView.findViewById(R.id.nametv);
             classtv=itemView.findViewById(R.id.classtv);
             boardtv=itemView.findViewById(R.id.boardtv);
@@ -117,10 +134,7 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
             amounttv=itemView.findViewById(R.id.amounttv);
             rvid=itemView.findViewById(R.id.rvid);
             lay=itemView.findViewById(R.id.lay);
-            SubscriptionMonthsAdapter adapter = new SubscriptionMonthsAdapter(subscibemonthsModelArrayList, context);
-            rvid.setHasFixedSize(true);
-            rvid.setLayoutManager(new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false));
-            rvid.setAdapter(adapter);
+
         }
     }
 }

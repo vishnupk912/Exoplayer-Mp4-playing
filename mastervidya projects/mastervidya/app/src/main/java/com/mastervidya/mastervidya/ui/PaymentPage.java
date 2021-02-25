@@ -45,13 +45,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class UpgradePayment extends AppCompatActivity implements PaymentResultListener {
+public class PaymentPage extends AppCompatActivity implements PaymentResultListener {
 
 
     SessionHandler sessionHandler;
     Dialog dialog_progress, dialog_month;
 
-    String classid, classname, board,name1;
+    String classid, classname, board;
     String id, name, phone, avatar_image;
     RequestQueue requestQueue;
     LinearLayout lay_main;
@@ -82,7 +82,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upgrade_payment);
+        setContentView(R.layout.activity_payment_page);
 
         back=findViewById(R.id.back);
 
@@ -160,9 +160,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
         classid =intent.getStringExtra("classid");
         classname =intent.getStringExtra("classname");
         board = intent.getStringExtra("board");
-        name1 = intent.getStringExtra("name");
 
-        etchild.setText(name1);
         boardtv.setText(board);
         classtv.setText(classname);
         subjects();
@@ -326,7 +324,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 
 
 
-      public void getcustomerdetails() {
+    public void getcustomerdetails() {
         Gson gson = new Gson();
         HashMap<String, String> user = sessionHandler.getLoginSession();
         String json = user.get(sessionHandler.KEY_LOGIN);
@@ -385,7 +383,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
                                 }
                             } else if (status.contains("invalid api key")) {
                                 Dialog dialog;
-                                dialog = new Dialog(UpgradePayment.this);
+                                dialog = new Dialog(PaymentPage.this);
                                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                                 dialog.setContentView(R.layout.alertdialog);
                                 dialog.setCancelable(false);
@@ -406,9 +404,9 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 
                             }
 
-                            SubjectAdapter adapter = new SubjectAdapter(UpgradePayment.this, subModelArrayList);
+                            SubjectAdapter adapter = new SubjectAdapter(PaymentPage.this, subModelArrayList);
                             recyclerView_sub.setHasFixedSize(true);
-                            recyclerView_sub.setLayoutManager(new GridLayoutManager(UpgradePayment.this, 3, RecyclerView.VERTICAL, false));
+                            recyclerView_sub.setLayoutManager(new GridLayoutManager(PaymentPage.this, 3, RecyclerView.VERTICAL, false));
                             recyclerView_sub.setAdapter(adapter);
 
                         } catch (JSONException e) {
@@ -441,7 +439,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
         sbView.setBackgroundResource(R.color.colorprimarydark);
         snackbar.show();
 
-        Intent intent = new Intent(UpgradePayment.this, TransactionActivity.class);
+        Intent intent = new Intent(PaymentPage.this, TransactionActivity.class);
         intent.putExtra("key", sessionHandler.getuniquekey());
         intent.putExtra("id", id);
         intent.putExtra("studentname", childname);
@@ -487,15 +485,15 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public SubjectAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View listitem = layoutInflater.inflate(R.layout.laysub, parent, false);
-            ViewHolder viewHolder = new ViewHolder(listitem);
+            SubjectAdapter.ViewHolder viewHolder = new SubjectAdapter.ViewHolder(listitem);
             return viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull SubjectAdapter.ViewHolder holder, int position) {
             String subname = subModelArrayList.get(position).getName();
 
             holder.subnametv.setText(position + 1 + ". " + subname);
@@ -596,9 +594,9 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 
                             }
 
-                            MonthsAdapter adapter = new MonthsAdapter(UpgradePayment.this, monthsModelArrayList);
+                            MonthsAdapter adapter = new MonthsAdapter(PaymentPage.this, monthsModelArrayList);
                             recyclerView_months.setHasFixedSize(true);
-                            recyclerView_months.setLayoutManager(new GridLayoutManager(UpgradePayment.this, 3, RecyclerView.VERTICAL, false));
+                            recyclerView_months.setLayoutManager(new GridLayoutManager(PaymentPage.this, 3, RecyclerView.VERTICAL, false));
                             recyclerView_months.setAdapter(adapter);
 
                         } catch (JSONException e) {
@@ -630,15 +628,15 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public MonthsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View listitem = layoutInflater.inflate(R.layout.laymonth, parent, false);
-            ViewHolder viewHolder = new ViewHolder(listitem);
+            MonthsAdapter.ViewHolder viewHolder = new MonthsAdapter.ViewHolder(listitem);
             return viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull MonthsAdapter.ViewHolder holder, int position) {
             String month = subModelArrayList.get(position).getMonth();
             String year = subModelArrayList.get(position).getYear();
             String status = subModelArrayList.get(position).getStatus();
@@ -713,7 +711,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 
     public void agentverfication() {
         Dialog otp_agent;
-        otp_agent = new Dialog(UpgradePayment.this);
+        otp_agent = new Dialog(PaymentPage.this);
         otp_agent.requestWindowFeature(Window.FEATURE_NO_TITLE);
         otp_agent.setContentView(R.layout.agentotplay);
         otp_agent.setCancelable(true);
@@ -817,9 +815,6 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
             json.put("agent_id", agent_id);
             json.put("otp", otp);
 
-            Log.d("otp",otp);
-            Log.d("key",sessionHandler.getuniquekey());
-            Log.d("id",id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -830,9 +825,8 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
             public void onResponse(JSONObject jsonObject) {
                 try {
                     String status = jsonObject.getString("status");
-                    Log.d("status",status);
-                    if (status.equals("verified")) {
-                        Intent intent = new Intent(UpgradePayment.this, TransactionActivity.class);
+                    if (status.contains("verified")) {
+                        Intent intent = new Intent(PaymentPage.this, TransactionActivity.class);
                         intent.putExtra("key", sessionHandler.getuniquekey());
                         intent.putExtra("id", id);
                         intent.putExtra("studentname", childname);
@@ -848,10 +842,8 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
                         intent.putStringArrayListExtra("arrayList_year1", arrayList_year1);
 
                         startActivity(intent);
-
-                    }
-                    else if(status.equals("not verified"))
-                        {
+//                        subscribe();
+                    } else {
                         etagentcode.setVisibility(View.GONE);
                         etotpcode.setVisibility(View.VISIBLE);
                         submitlay.setVisibility(View.GONE);
@@ -931,6 +923,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
                 try {
                     String status = jsonObject.getString("status");
                     if (status.contains("verified")) {
+                        Toast.makeText(PaymentPage.this, "success congrats ", Toast.LENGTH_SHORT).show();
                     } else {
 
                     }
@@ -973,9 +966,9 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 //            preFill.put("email", );
             preFill.put("contact", phone);
             options.put("prefill", preFill);
-            co.open(UpgradePayment.this, options);
+            co.open(PaymentPage.this, options);
         } catch (Exception e) {
-            Toast.makeText(UpgradePayment.this, "Error in payment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(PaymentPage.this, "Error in payment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
 
         }
@@ -1005,7 +998,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
             @Override
             public void onClick(View view)
             {
-                Intent intent=new Intent(UpgradePayment.this,Payments.class);
+                Intent intent=new Intent(PaymentPage.this,Payments.class);
                 startActivity(intent);
             }
         });

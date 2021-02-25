@@ -13,13 +13,15 @@ import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.model.SubscibemonthsModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SubscriptionMonthsAdapter extends RecyclerView.Adapter<SubscriptionMonthsAdapter.ViewHolder>
 {
-    ArrayList<SubscibemonthsModel> subscibemonthsModelArrayList=new ArrayList<>();
+    ArrayList<HashMap<String,String>> subscibemonthsModelArrayList=new ArrayList<>();
     Context context;
 
-    public SubscriptionMonthsAdapter(ArrayList<SubscibemonthsModel> subscibemonthsModelArrayList, Context context) {
+
+    public SubscriptionMonthsAdapter( ArrayList<HashMap<String,String>> subscibemonthsModelArrayList , Context context) {
         this.subscibemonthsModelArrayList = subscibemonthsModelArrayList;
         this.context = context;
     }
@@ -36,10 +38,10 @@ public class SubscriptionMonthsAdapter extends RecyclerView.Adapter<Subscription
     @Override
     public void onBindViewHolder(@NonNull SubscriptionMonthsAdapter.ViewHolder holder, int position)
     {
-        String month=subscibemonthsModelArrayList.get(position).getMonth();
-        String year=subscibemonthsModelArrayList.get(position).getYear();
-        holder.tv1.setText(month);
-        holder.tv2.setText(year);
+//        String month=month.get(position).getMonth();
+//        String year=month.get(position).getYear();
+        holder.tv1.setText(subscibemonthsModelArrayList.get(position).get("month"));
+        holder.tv2.setText(subscibemonthsModelArrayList.get(position).get("year"));
 
     }
 

@@ -43,7 +43,6 @@ public class Payments extends AppCompatActivity {
     String id,name,phone,avatar_image;
     RequestQueue requestQueue;
     Dialog dialog_progress;
-    LinearLayout addlay;
     RecyclerView recyclerView;
     ImageView back;
     LinearLayout noclasslay,classlay;
@@ -52,7 +51,7 @@ public class Payments extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payments);
         recyclerView=findViewById(R.id.rvid);
-        addlay=findViewById(R.id.add);
+
         sessionHandler=new SessionHandler(this);
         requestQueue = RequestQueueSingleton.getInstance(this)
                 .getRequestQueue();
@@ -76,13 +75,6 @@ public class Payments extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(Payments.this,Homepage.class);
-                startActivity(intent);
-            }
-        });
-        addlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Payments.this,AddClass.class);
                 startActivity(intent);
             }
         });
@@ -140,6 +132,7 @@ public class Payments extends AppCompatActivity {
                             String  status=response.getString("status");
                             if(status.contains("success"))
                             {
+                                Log.d("response",response.toString());
                                 JSONArray jsonArray=response.getJSONArray("data");
                                 for(int i=0;i<jsonArray.length();i++)
                                 {
@@ -165,10 +158,12 @@ public class Payments extends AppCompatActivity {
                                     paymentmodel.setDate(date);
                                     paymentmodelArrayList.add(paymentmodel);
 
+
                                     JSONArray jsonArray1_packages=jsonObject.getJSONArray("packages");
 
                                     for(int j=0;j<jsonArray1_packages.length();j++)
                                     {
+
                                         SubscibemonthsModel subscibemonthsModel=new SubscibemonthsModel();
                                         JSONObject jsonObject1=jsonArray1_packages.getJSONObject(j);
                                         String month=jsonObject1.getString("month");
@@ -181,10 +176,21 @@ public class Payments extends AppCompatActivity {
                                     }
 
                                 }
-                                SubscriptionAdapter adapter = new SubscriptionAdapter(subscibemonthsModelArrayList,paymentmodelArrayList,Payments.this);
-                                recyclerView.setHasFixedSize(true);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(Payments.this,RecyclerView.VERTICAL,false));
-                                recyclerView.setAdapter(adapter);
+                                if(!paymentmodelArrayList.isEmpty())
+                                {
+                                    noclasslay.setVisibility(View.GONE);
+                                    classlay.setVisibility(View.VISIBLE);
+                                    SubscriptionAdapter adapter = new SubscriptionAdapter(subscibemonthsModelArrayList,paymentmodelArrayList,Payments.this);
+                                    recyclerView.setHasFixedSize(true);
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(Payments.this,RecyclerView.VERTICAL,false));
+                                    recyclerView.setAdapter(adapter);
+                                }
+                                else
+                                {
+                                    noclasslay.setVisibility(View.VISIBLE);
+                                    classlay.setVisibility(View.GONE);
+                                }
+
 
                             }
                         } catch (JSONException e)

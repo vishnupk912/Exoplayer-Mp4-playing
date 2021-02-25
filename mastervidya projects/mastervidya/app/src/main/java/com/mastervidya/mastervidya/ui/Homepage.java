@@ -10,7 +10,9 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -180,7 +183,8 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         signoutlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sessionHandler.logoutUser();
+
+                prompt("Sign Out","Do you want logout from the Application ?");
             }
         });
         chatlay.setOnClickListener(new View.OnClickListener() {
@@ -432,6 +436,29 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                                 }
 
                             }
+                            else if(status.contains("invalid api key"))
+                            {
+                                Dialog dialog;
+                                dialog = new Dialog(Homepage.this);
+                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialog.setContentView(R.layout.alertdialog);
+                                dialog.setCancelable(false);
+                                dialog.setCanceledOnTouchOutside(false);
+                                dialog.setCancelable(false);
+                                dialog.setCanceledOnTouchOutside(false);
+                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                dialog.show();
+                                LinearLayout linearLayout=dialog.findViewById(R.id.okid);
+
+
+                                linearLayout.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        sessionHandler.logoutUser();
+                                    }
+                                });
+
+                            }
 
                             DemovideoAdapter adapter = new DemovideoAdapter(Homepage.this,demovideomodelArrayList);
                             recyclerView_demovideo.setHasFixedSize(true);
@@ -460,4 +487,44 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         });
         requestQueue.add(jsonObjectRequest);
     }
+
+    public void prompt(final  String header,final String subheader)
+    {
+        Dialog dialog;
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialog);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.show();
+        LinearLayout oklay=dialog.findViewById(R.id.okid);
+        LinearLayout cancellay=dialog.findViewById(R.id.cancelid);
+        TextView headertv=dialog.findViewById(R.id.tvhead_id);
+        TextView subheadertv=dialog.findViewById(R.id.tv1_id);
+
+        headertv.setText(header);
+        subheadertv.setText(subheader);
+
+        cancellay.setVisibility(View.VISIBLE);
+        oklay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                sessionHandler.logoutUser();
+            }
+        });
+
+        cancellay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+
+            }
+        });
+
+    }
+
 }
