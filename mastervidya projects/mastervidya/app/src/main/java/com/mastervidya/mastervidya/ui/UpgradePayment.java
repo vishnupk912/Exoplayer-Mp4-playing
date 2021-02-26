@@ -3,6 +3,7 @@ package com.mastervidya.mastervidya.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
@@ -30,11 +31,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
+import com.mastervidya.mastervidya.adapter.SubscriptionAdapter;
+import com.mastervidya.mastervidya.adapter.SubscriptionMonthsAdapter;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
 import com.mastervidya.mastervidya.model.MonthsModel;
+import com.mastervidya.mastervidya.model.Paymentmodel;
 import com.mastervidya.mastervidya.model.SubModel;
+import com.mastervidya.mastervidya.model.SubscibemonthsModel;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -48,6 +53,7 @@ import java.util.HashMap;
 public class UpgradePayment extends AppCompatActivity implements PaymentResultListener {
 
 
+    RecyclerView rvid;
     SessionHandler sessionHandler;
     Dialog dialog_progress, dialog_month;
 
@@ -83,7 +89,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upgrade_payment);
-
+        rvid=findViewById(R.id.rvid);
         back=findViewById(R.id.back);
 
         sessionHandler = new SessionHandler(this);
@@ -320,6 +326,7 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
             }
         });
 
+        getdata();
 
 
     }
@@ -572,7 +579,8 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
                                 }
                                 JSONArray jsonArray1 = jsonObject1.getJSONArray("months");
                                 {
-                                    for (int i = 0; i < jsonArray1.length(); i++) {
+                                    for (int i = 0; i < jsonArray1.length(); i++)
+                                    {
                                         MonthsModel monthsModel = new MonthsModel();
 
                                         JSONObject jsonObject11 = jsonArray1.getJSONObject(i);
@@ -585,12 +593,17 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
                                         monthsModel.setStatus(status);
                                         monthsModelArrayList.add(monthsModel);
 
-                                        arrayList_month1.add(month);
-                                        arrayList_year1.add(year);
+
+                                        if(status.equals("0"))
+                                        {
+                                            arrayList_month1.add(month);
+                                            arrayList_year1.add(year);
+
+                                        }
 
                                     }
 
-                                    Log.d("arraylist", arrayList_month1.toString());
+                                    Log.d("arraylist4", arrayList_month1.toString());
 
                                 }
 
@@ -1020,6 +1033,95 @@ public class UpgradePayment extends AppCompatActivity implements PaymentResultLi
 
     }
 
+    public void getdata()
+    {
+        ArrayList<Paymentmodel> paymentmodelArrayList=new ArrayList<>();
+        ArrayList<SubscibemonthsModel> subscibemonthsModelArrayList=new ArrayList<>();
+        dialog_progress.show();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("key",sessionHandler.getuniquekey());
+            json.put("id",id);
+            Log.d("key",sessionHandler.getuniquekey());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Url.subscriptions, json,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        dialog_progress.dismiss();
+                        try {
+                            String  status=response.getString("status");
+                            if(status.contains("success"))
+                            {
+                                Log.d("response",response.toString());
+                                JSONArray jsonArray=response.getJSONArray("data");
+                                for(int i=0;i<jsonArray.length();i++)
+                                {
+                                    Paymentmodel paymentmodel=new Paymentmodel();
+                                    JSONObject jsonObject=jsonArray.getJSONObject(i);
+                                    String student_name=jsonObject.getString("student_name");
+                                    String class_id=jsonObject.getString("class_id");
+                                    String classs=jsonObject.getString("class");
+                                    String payment_type=jsonObject.getString("payment_type");
+                                    String amount=jsonObject.getString("amount");
+                                    String subscription_type=jsonObject.getString("subscription_type");
+                                    String board=jsonObject.getString("board");
+
+                                    String date=jsonObject.getString("date");
+
+                                    paymentmodel.setStudent_name(student_name);
+                                    paymentmodel.setClass_id(class_id);
+                                    paymentmodel.setClasss(classs);
+                                    paymentmodel.setPayment_type(payment_type);
+                                    paymentmodel.setAmount(amount);
+                                    paymentmodel.setSubscription_type(subscription_type);
+                                    paymentmodel.setBoard(board);
+                                    paymentmodel.setDate(date);
+
+
+                                    JSONArray jsonArray1_packages=jsonObject.getJSONArray("packages");
+
+                                    for(int j=0;j<jsonArray1_packages.length();j++)
+                                    {
+                                        SubscibemonthsModel subscibemonthsModel=new SubscibemonthsModel();
+
+                                        JSONObject jsonObject1=jsonArray1_packages.getJSONObject(j);
+                                        String month=jsonObject1.getString("month");
+                                        String year=jsonObject1.getString("year");
+
+                                        subscibemonthsModel.setMonth(month);
+                                        subscibemonthsModel.setYear(year);
+                                        subscibemonthsModelArrayList.add(subscibemonthsModel);
+
+
+                                    }
+                                    paymentmodel.setLength( String.valueOf(jsonArray1_packages.length()));
+                                    paymentmodelArrayList.add(paymentmodel);
+
+                                }
+
+                                   RecyclerView.Adapter adapter = new SubscriptionMonthsAdapter(subscibemonthsModelArrayList, UpgradePayment.this);
+                                   rvid.setHasFixedSize(true);
+                                   rvid.setLayoutManager(new LinearLayoutManager(UpgradePayment.this,RecyclerView.HORIZONTAL,false));
+                                   rvid.setAdapter(adapter);
+
+
+
+                            }
+                        } catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
 
 }

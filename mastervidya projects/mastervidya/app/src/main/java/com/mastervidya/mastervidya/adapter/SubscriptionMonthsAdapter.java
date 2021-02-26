@@ -17,11 +17,11 @@ import java.util.HashMap;
 
 public class SubscriptionMonthsAdapter extends RecyclerView.Adapter<SubscriptionMonthsAdapter.ViewHolder>
 {
-    ArrayList<HashMap<String,String>> subscibemonthsModelArrayList=new ArrayList<>();
+    ArrayList<SubscibemonthsModel> subscibemonthsModelArrayList=new ArrayList<>();
     Context context;
 
 
-    public SubscriptionMonthsAdapter( ArrayList<HashMap<String,String>> subscibemonthsModelArrayList , Context context) {
+    public SubscriptionMonthsAdapter( ArrayList<SubscibemonthsModel> subscibemonthsModelArrayList , Context context) {
         this.subscibemonthsModelArrayList = subscibemonthsModelArrayList;
         this.context = context;
     }
@@ -40,8 +40,8 @@ public class SubscriptionMonthsAdapter extends RecyclerView.Adapter<Subscription
     {
 //        String month=month.get(position).getMonth();
 //        String year=month.get(position).getYear();
-        holder.tv1.setText(subscibemonthsModelArrayList.get(position).get("month"));
-        holder.tv2.setText(subscibemonthsModelArrayList.get(position).get("year"));
+        holder.tv1.setText(subscibemonthsModelArrayList.get(position).getMonth());
+        holder.tv2.setText(subscibemonthsModelArrayList.get(position).getYear());
 
     }
 

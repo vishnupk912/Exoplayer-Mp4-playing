@@ -3,6 +3,7 @@ package com.mastervidya.mastervidya.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.model.Paymentmodel;
 import com.mastervidya.mastervidya.model.SubscibemonthsModel;
+import com.mastervidya.mastervidya.model.SubscibemonthsModel1;
 import com.mastervidya.mastervidya.ui.AddClass;
 import com.mastervidya.mastervidya.ui.Payments;
 import com.mastervidya.mastervidya.ui.UpgradePayment;
@@ -33,7 +35,7 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
     ArrayList<Paymentmodel> paymentmodelArrayList=new ArrayList<>();
     ArrayList<SubscibemonthsModel> subscibemonthsModelArrayList=new ArrayList<>();
     Context context;
-
+    SubscriptionMonthsAdapter adapter;
     public SubscriptionAdapter(ArrayList<SubscibemonthsModel> subscibemonthsModelArrayList,ArrayList<Paymentmodel> paymentmodelArrayList, Context context) {
         this.paymentmodelArrayList = paymentmodelArrayList;
         this.subscibemonthsModelArrayList = subscibemonthsModelArrayList;
@@ -60,6 +62,8 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
         String subscriptiontype=paymentmodelArrayList.get(position).getSubscription_type();
         String amount=paymentmodelArrayList.get(position).getAmount();
         String date=paymentmodelArrayList.get(position).getDate();
+        String length=paymentmodelArrayList.get(position).getLength();
+
 
         holder.datetv.setText("Enrolled Date : "+date);
         holder.nametv.setText("Name : "+name);
@@ -100,16 +104,15 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
             }
         });
 
-        ArrayList<HashMap<String,String>> hashMapArrayList=new ArrayList<>();
-        HashMap<String,String> hashMap=new HashMap<>();
-        hashMap.put("month",subscibemonthsModelArrayList.get(position).getMonth());
-        hashMap.put("year",subscibemonthsModelArrayList.get(position).getYear());
-        hashMapArrayList.add(hashMap);
 
-        SubscriptionMonthsAdapter adapter = new SubscriptionMonthsAdapter(hashMapArrayList, context);
+
+        adapter = new SubscriptionMonthsAdapter(subscibemonthsModelArrayList, context);
         holder.rvid.setHasFixedSize(true);
         holder.rvid.setLayoutManager(new LinearLayoutManager(context,RecyclerView.HORIZONTAL,false));
         holder.rvid.setAdapter(adapter);
+
+        holder.monthtv.setText("Enrolled for "+length+" Months");
+
     }
 
     @Override
@@ -119,12 +122,12 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        TextView nametv,classtv,boardtv,paymentstatustv,subscriptionstv,amounttv,datetv;
+        TextView nametv,classtv,boardtv,paymentstatustv,subscriptionstv,amounttv,datetv,monthtv;
         RecyclerView rvid;
         LinearLayout lay;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            monthtv=itemView.findViewById(R.id.monthtv);
             datetv=itemView.findViewById(R.id.datetv);
             nametv=itemView.findViewById(R.id.nametv);
             classtv=itemView.findViewById(R.id.classtv);
@@ -134,6 +137,8 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
             amounttv=itemView.findViewById(R.id.amounttv);
             rvid=itemView.findViewById(R.id.rvid);
             lay=itemView.findViewById(R.id.lay);
+
+
 
         }
     }

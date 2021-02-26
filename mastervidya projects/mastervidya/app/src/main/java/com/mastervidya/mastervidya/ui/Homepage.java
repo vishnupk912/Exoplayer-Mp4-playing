@@ -521,7 +521,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             @Override
             public void onClick(View view)
             {
-
+                dialog.dismiss();
             }
         });
 

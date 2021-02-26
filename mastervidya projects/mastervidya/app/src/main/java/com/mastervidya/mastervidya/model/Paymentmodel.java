@@ -10,6 +10,15 @@ public class Paymentmodel
     String subscription_type;
     String board;
     String date;
+    String length;
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
 
     public String getStudent_name() {
         return student_name;

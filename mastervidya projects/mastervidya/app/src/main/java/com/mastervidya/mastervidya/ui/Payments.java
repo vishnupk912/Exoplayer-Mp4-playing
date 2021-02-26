@@ -156,7 +156,6 @@ public class Payments extends AppCompatActivity {
                                     paymentmodel.setSubscription_type(subscription_type);
                                     paymentmodel.setBoard(board);
                                     paymentmodel.setDate(date);
-                                    paymentmodelArrayList.add(paymentmodel);
 
 
                                     JSONArray jsonArray1_packages=jsonObject.getJSONArray("packages");
@@ -171,9 +170,12 @@ public class Payments extends AppCompatActivity {
 
                                         subscibemonthsModel.setMonth(month);
                                         subscibemonthsModel.setYear(year);
-                                        subscibemonthsModelArrayList.add(subscibemonthsModel);
+
+
 
                                     }
+                                    paymentmodel.setLength( String.valueOf(jsonArray1_packages.length()));
+                                    paymentmodelArrayList.add(paymentmodel);
 
                                 }
                                 if(!paymentmodelArrayList.isEmpty())

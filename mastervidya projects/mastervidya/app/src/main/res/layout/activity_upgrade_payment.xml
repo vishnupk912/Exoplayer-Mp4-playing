@@ -58,6 +58,34 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/lgrey"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/ts14"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Enrolled Months"
+                            android:textColor="@color/black"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textSize="@dimen/sp16"
+                            android:layout_marginTop="@dimen/ts12"
+                            />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:overScrollMode="never"
+                            android:layout_marginTop="@dimen/ts12"
+                            android:layout_marginBottom="@dimen/ts12"
+                            />
+
+                    </LinearLayout>
 
 
 
