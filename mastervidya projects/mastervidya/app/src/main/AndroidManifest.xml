@@ -40,7 +40,6 @@
         <activity android:name=".ui.UpgradePayment" />
         <activity android:name=".ui.Payments" />
         <activity android:name=".ui.SpecialStudy" />
-        <activity android:name=".ui.ClasseViewActivity" />
         <activity android:name=".Subjects" />
         <activity android:name=".ui.TransactionActivity" />
         <activity android:name=".ui.Profile" />
