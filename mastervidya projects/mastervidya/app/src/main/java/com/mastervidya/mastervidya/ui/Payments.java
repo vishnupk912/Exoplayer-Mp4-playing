@@ -118,7 +118,6 @@ public class Payments extends AppCompatActivity {
         try {
             json.put("key",sessionHandler.getuniquekey());
             json.put("id",id);
-//            Log.d("key",sessionHandler.getuniquekey());
         } catch (JSONException e) {
             e.printStackTrace();
         }
