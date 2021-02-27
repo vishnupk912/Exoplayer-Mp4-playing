@@ -1,8 +1,6 @@
 package com.mastervidya.mastervidya.video;
 
-/**
- * Created by Mayur Solanki (mayursolanki120@gmail.com) on 04/03/19, 6:18 PM.
- */
+
 
 import android.content.Context;
 import android.content.res.Configuration;

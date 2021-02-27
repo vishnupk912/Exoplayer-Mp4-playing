@@ -65,7 +65,7 @@
 
         </RelativeLayout>
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:id="@+id/lin_media_controller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -157,14 +157,14 @@
 
 
                 <ImageView
-                    android:layout_marginRight="@dimen/ts2"
-
-                    android:padding="@dimen/ts4"
                     android:id="@+id/img_setting"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/ts40"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:src="@drawable/ic_settings_white_24dp"
-                    android:layout_width="@dimen/ts40"
-                    android:layout_height="@dimen/ts40" />
+                    android:layout_marginRight="@dimen/ts2"
+                    android:padding="@dimen/ts4"
+                    android:src="@drawable/ic_settings_white_24dp" />
 
                 <ImageView
                     android:id="@+id/img_full_screen_enter_exit"

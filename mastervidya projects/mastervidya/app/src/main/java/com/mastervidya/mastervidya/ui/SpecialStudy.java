@@ -33,6 +33,7 @@ import com.mastervidya.mastervidya.Subjects;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
+import com.mastervidya.mastervidya.model.ChapterModel;
 import com.mastervidya.mastervidya.model.SubModel;
 
 import org.json.JSONArray;
@@ -228,6 +229,16 @@ public class SpecialStudy extends AppCompatActivity {
                     .centerCrop()
                     .into(holder.imageView);
             holder.subnametv.setText(position+1 +". "+subname);
+
+            holder.lay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    Intent intent=new Intent(SpecialStudy.this, Chapters.class);
+//                    intent.putExtra("sub_id",subModelArrayList.get(position).getId());
+//                    intent.putExtra("sub_name",subModelArrayList.get(position).getName());
+//                    startActivity(intent);
+                }
+            });
 
 
         }

@@ -32,6 +32,7 @@ import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
 import com.mastervidya.mastervidya.model.SubModel;
+import com.mastervidya.mastervidya.ui.Chapters;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +49,7 @@ public class Subjects extends AppCompatActivity {
     Dialog dialog_progress;
     String classid;
     LinearLayout lay_main;
+    ImageView  back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class Subjects extends AppCompatActivity {
         requestQueue = RequestQueueSingleton.getInstance(this)
                 .getRequestQueue();
 
+        back=findViewById(R.id.back);
         Intent intent=getIntent();
         classid=intent.getStringExtra("class_id");
         dialog_progress = new Dialog(this);
@@ -74,6 +77,12 @@ public class Subjects extends AppCompatActivity {
         getcustomerdetails();
         subjects();
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     private void subjects()
     {
@@ -116,6 +125,7 @@ public class Subjects extends AppCompatActivity {
 
                                     subModel.setName(subject);
                                     subModel.setImagel(image);
+                                    subModel.setId(sub_id);
 
                                     subModelArrayList.add(subModel);
 
@@ -203,7 +213,15 @@ public class Subjects extends AppCompatActivity {
                     .into(holder.imageView);
             holder.subnametv.setText(position+1 +". "+subname);
 
-
+            holder.lay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(Subjects.this, Chapters.class);
+                    intent.putExtra("sub_id",subModelArrayList.get(position).getId());
+                    intent.putExtra("sub_name",subModelArrayList.get(position).getName());
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override

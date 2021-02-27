@@ -25,6 +25,8 @@ public class Url
     public  static  final String dashboard=base_url1+"dashboard";
     public  static  final String special_study=base_url1+"special_study";
     public  static  final String subscriptions=base_url1+"subscriptions";
+    public  static  final String chapters=base_url1+"chapters";
+    public  static  final String videos=base_url1+"videos";
 
 
 

@@ -242,10 +242,12 @@ public final class TrackSelectionDialog extends DialogFragment {
     ViewPager viewPager = dialogView.findViewById(R.id.track_selection_dialog_view_pager);
     Button cancelButton = dialogView.findViewById(R.id.track_selection_dialog_cancel_button);
     Button okButton = dialogView.findViewById(R.id.track_selection_dialog_ok_button);
+
     viewPager.setAdapter(new FragmentAdapter(getChildFragmentManager()));
     tabLayout.setupWithViewPager(viewPager);
     tabLayout.setVisibility(tabFragments.size() > 1 ? View.VISIBLE : View.GONE);
     cancelButton.setOnClickListener(view -> dismiss());
+
     okButton.setOnClickListener(
         view -> {
           onClickListener.onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);

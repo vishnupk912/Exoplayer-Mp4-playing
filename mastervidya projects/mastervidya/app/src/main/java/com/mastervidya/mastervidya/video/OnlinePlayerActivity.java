@@ -183,7 +183,7 @@ DefaultTrackSelector.Parameters qualityParams;
     private DownloadManager downloadManager;
     private DownloadHelper myDownloadHelper;
 
-    private String videoId,videoUrl="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",videoName;
+    private String videoId,videoUrl,videoName,subjectname,chaptername,description,classname;
     private long videoDurationInSeconds;
     private Runnable runnableCode;
     private Handler handler;
@@ -221,14 +221,23 @@ DefaultTrackSelector.Parameters qualityParams;
 
         setContentView(R.layout.activity_online_player);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-           
-//            videoId = bundle.getString("video_id");
-//            videoName = bundle.getString("video_name");
-//            videoUrl = bundle.getString("video_url");
-//            videoDurationInSeconds =bundle.getLong("video_duration");
-        }
+        Intent intent=getIntent();
+        videoUrl=intent.getStringExtra("video_url");
+        videoName=intent.getStringExtra("title");
+        chaptername=intent.getStringExtra("chapter");
+        subjectname=intent.getStringExtra("subject");
+        classname=intent.getStringExtra("class");
+        description=intent.getStringExtra("desc");
+
+        TextView textView_title,textView_class,textView_desc;
+
+        textView_title=findViewById(R.id.titletv);
+        textView_class=findViewById(R.id.tv2);
+        textView_desc=findViewById(R.id.decsptv);
+
+        textView_title.setText(videoName);
+        textView_class.setText(subjectname+" | "+chaptername);
+        textView_desc.setText(description);
 
         if (savedInstanceState != null) {
             trackSelectorParameters = savedInstanceState.getParcelable(KEY_TRACK_SELECTOR_PARAMETERS);

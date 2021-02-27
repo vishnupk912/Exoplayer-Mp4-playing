@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:layout_margin="@dimen/ts8"
+    android:background="@drawable/buttonshape2light"
+    android:elevation="@dimen/ts12"
+    android:id="@+id/lay"
+    android:layout_height="@dimen/cat1">
+
+    <LinearLayout
+        android:layout_width="@dimen/ts40"
+        android:layout_height="@dimen/ts40"
+        android:background="@drawable/buttonshape1"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/ts12"
+        >
+        <TextView
+            android:id="@+id/position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="@dimen/sp16"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppinsmedium"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/chapternametv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/ts16"
+            android:fontFamily="@font/poppinsregular"
+            android:text="ChapterName"
+            android:textColor="@color/colorprimarydark"
+            android:textSize="@dimen/sp16" />
+        <TextView
+            android:id="@+id/yeartv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/ts16"
+            android:fontFamily="@font/poppinsmedium"
+            android:text="ChapterName"
+            android:textColor="@color/black"
+            android:textSize="@dimen/ts8" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="right|center_vertical"
+        android:layout_marginRight="@dimen/ts12"
+
+
+        >
+        <LinearLayout
+            android:id="@+id/statuslay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttonshape2light3"
+            >
+            <TextView
+                android:id="@+id/statustv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Coming Soon"
+                android:layout_marginRight="@dimen/ts12"
+                android:textColor="@color/white"
+                android:fontFamily="@font/poppinssemibold"
+                android:layout_marginLeft="@dimen/ts12"
+                android:layout_marginTop="@dimen/ts4"
+                android:layout_marginBottom="@dimen/ts4"
+
+                />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

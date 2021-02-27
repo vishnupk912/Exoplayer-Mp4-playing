@@ -33,7 +33,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.PaymentPage"></activity>
+        <activity android:name=".ui.VideoListing"></activity>
+        <activity android:name=".ui.Chapters" />
+        <activity android:name=".ui.PaymentPage" />
         <activity android:name=".ui.AddClass1" />
         <activity android:name=".ui.UpgradePayment" />
         <activity android:name=".ui.Payments" />
