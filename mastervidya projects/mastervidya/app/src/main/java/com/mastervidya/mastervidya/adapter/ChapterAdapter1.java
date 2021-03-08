@@ -7,23 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.model.ChapterModel;
+import com.mastervidya.mastervidya.ui.SpecialVideoListing;
 import com.mastervidya.mastervidya.ui.VideoListing;
 
 import java.util.ArrayList;
 
-public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHolder>
+public class ChapterAdapter1 extends RecyclerView.Adapter<ChapterAdapter1.ViewHolder>
 {
     ArrayList<ChapterModel> chapterModelArrayList=new ArrayList<>();
     Context context;
 
-    public ChapterAdapter(ArrayList<ChapterModel> chapterModelArrayList, Context context) {
+    public ChapterAdapter1(ArrayList<ChapterModel> chapterModelArrayList, Context context) {
         this.chapterModelArrayList = chapterModelArrayList;
         this.context = context;
     }
@@ -45,12 +45,11 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
 
         String status=chapterModelArrayList.get(position).getStatus();
 
-        String year=chapterModelArrayList.get(position).getYear();
-        String  month=chapterModelArrayList.get(position).getMonth();
-
-        holder.yeartv.setText(year+" | "+month);
 
 
+        holder.yeartv.setVisibility(View.GONE);
+
+        
 
         if(status.contains("0"))
         {
@@ -66,7 +65,7 @@ public class ChapterAdapter extends RecyclerView.Adapter<ChapterAdapter.ViewHold
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(context, VideoListing.class);
+                    Intent intent=new Intent(context, SpecialVideoListing.class);
                     intent.putExtra("chapname",chapterModelArrayList.get(position).getChaptername());
                     intent.putExtra("chapter_id",chapterModelArrayList.get(position).getId());
                     intent.putExtra("sub_id",chapterModelArrayList.get(position).getId());

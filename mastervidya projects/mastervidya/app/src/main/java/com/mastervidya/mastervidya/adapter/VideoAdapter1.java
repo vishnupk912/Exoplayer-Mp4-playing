@@ -2,7 +2,6 @@ package com.mastervidya.mastervidya.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,24 +15,22 @@ import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.model.VideoModel;
 import com.mastervidya.mastervidya.video.OnlinePlayerActivity;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>
+public class VideoAdapter1 extends RecyclerView.Adapter<VideoAdapter1.ViewHolder>
 {
 
     ArrayList<VideoModel>  videoModelArrayList=new ArrayList<>();
     Context context;
 
-    public VideoAdapter(ArrayList<VideoModel> videoModelArrayList, Context context) {
+    public VideoAdapter1(ArrayList<VideoModel> videoModelArrayList, Context context) {
         this.videoModelArrayList = videoModelArrayList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public VideoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public VideoAdapter1.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater=LayoutInflater.from(parent.getContext());
         View listitem=layoutInflater.inflate(R.layout.videolay,parent,false);
         ViewHolder viewHolder=new ViewHolder(listitem);
@@ -41,7 +38,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VideoAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull VideoAdapter1.ViewHolder holder, int position) {
 
         String name=videoModelArrayList.get(position).getTitle();
         holder.nametv.setText(name);
@@ -58,7 +55,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>
                 intent.putExtra("title",videoModelArrayList.get(position).getTitle());
                 intent.putExtra("subject",videoModelArrayList.get(position).getSubject());
                 intent.putExtra("desc",videoModelArrayList.get(position).getDescirption());
-                intent.putExtra("chapter_id",videoModelArrayList.get(position).getChapter_id());
+                intent.putExtra("chapter_id","0");
                 context.startActivity(intent);
             }
         });

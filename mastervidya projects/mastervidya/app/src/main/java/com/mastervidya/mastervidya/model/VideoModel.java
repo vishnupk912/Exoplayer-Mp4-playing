@@ -4,6 +4,15 @@ public class VideoModel
 {
     String videoid,title,url,descirption;
     String chapter,subject,classs;
+    String chapter_id;
+
+    public String getChapter_id() {
+        return chapter_id;
+    }
+
+    public void setChapter_id(String chapter_id) {
+        this.chapter_id = chapter_id;
+    }
 
     public String getSubject() {
         return subject;

@@ -46,12 +46,13 @@
 
 
     <LinearLayout
+
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:background="@drawable/buttonshape2light"
         android:elevation="@dimen/ts12"
         android:gravity="center_vertical"
-        android:id="@+id/lay"
+        android:id="@+id/layquiz"
         android:layout_margin="@dimen/ts8"
 
         android:layout_height="@dimen/cat1">
@@ -59,7 +60,7 @@
         <LinearLayout
             android:layout_width="@dimen/ts40"
             android:layout_height="@dimen/ts40"
-            android:background="@drawable/ic_playbutton"
+            android:background="@drawable/ic_quiz"
             android:gravity="center"
             android:layout_marginLeft="@dimen/ts12"
             >

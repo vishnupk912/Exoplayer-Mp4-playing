@@ -19,7 +19,7 @@ public enum ExoDownloadState {
     public String getValue() {
         return value;
     }
-    private ExoDownloadState(String value) {
+    ExoDownloadState(String value) {
         this.value = value;
     }
 

@@ -1,15 +1,20 @@
 package com.mastervidya.mastervidya.video;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.util.Pair;
@@ -20,6 +25,7 @@ import android.view.Surface;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.DownloadListener;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -31,8 +37,23 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.multidex.MultiDex;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.DownloadProgressListener;
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -73,14 +94,30 @@ import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.util.ErrorMessageProvider;
 import com.google.android.exoplayer2.util.EventLogger;
 import com.google.android.exoplayer2.util.Util;
+import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
+import com.mastervidya.mastervidya.adapter.ChapterAdapter;
+import com.mastervidya.mastervidya.adapter.VideoAdapter;
+import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
+import com.mastervidya.mastervidya.helper.SessionHandler;
+import com.mastervidya.mastervidya.helper.Url;
+import com.mastervidya.mastervidya.model.ChapterModel;
+import com.mastervidya.mastervidya.model.VideoModel;
+import com.mastervidya.mastervidya.ui.Chapters;
+import com.mastervidya.mastervidya.ui.VideoListing;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -92,12 +129,16 @@ import static com.google.android.exoplayer2.offline.Download.STATE_QUEUED;
 import static com.google.android.exoplayer2.offline.Download.STATE_REMOVING;
 import static com.google.android.exoplayer2.offline.Download.STATE_RESTARTING;
 import static com.google.android.exoplayer2.offline.Download.STATE_STOPPED;
+import static com.mastervidya.mastervidya.video.ExoDownloadState.DOWNLOAD_START;
 
 /**
  * Created by Mayur Solanki (mayursolanki120@gmail.com) on 22/03/19, 1:20 PM.
  */
 public class OnlinePlayerActivity extends AppCompatActivity implements View.OnClickListener, PlaybackPreparer, PlayerControlView.VisibilityListener, DownloadTracker.Listener {
 
+    String id,name,phone,avatar_image;
+
+    TextView rvtvid;
     private static final int playerHeight = 300;
     ProgressDialog pDialog;
     protected static final CookieManager DEFAULT_COOKIE_MANAGER;
@@ -176,13 +217,16 @@ DefaultTrackSelector.Parameters qualityParams;
     private TextView tvPlayerEndTime;
     private ImageView imgSetting;
     private ImageView imgFullScreenEnterExit;
-
+    private RecyclerView recyclerView;
     private StringBuilder mFormatBuilder;
     private Formatter mFormatter;
     private DownloadTracker downloadTracker;
     private DownloadManager downloadManager;
     private DownloadHelper myDownloadHelper;
-
+    RequestQueue requestQueue;
+    SessionHandler sessionHandler;
+    ImageView downloadimage;
+    String chapter_id;
     private String videoId,videoUrl,videoName,subjectname,chaptername,description,classname;
     private long videoDurationInSeconds;
     private Runnable runnableCode;
@@ -228,9 +272,14 @@ DefaultTrackSelector.Parameters qualityParams;
         subjectname=intent.getStringExtra("subject");
         classname=intent.getStringExtra("class");
         description=intent.getStringExtra("desc");
+        chapter_id=intent.getStringExtra("chapter_id");
 
         TextView textView_title,textView_class,textView_desc;
-
+        requestQueue = RequestQueueSingleton.getInstance(this)
+                .getRequestQueue();
+        recyclerView=findViewById(R.id.rvid);
+        sessionHandler=new SessionHandler(this);
+        downloadimage=findViewById(R.id.downloadimage);
         textView_title=findViewById(R.id.titletv);
         textView_class=findViewById(R.id.tv2);
         textView_desc=findViewById(R.id.decsptv);
@@ -275,6 +324,8 @@ DefaultTrackSelector.Parameters qualityParams;
 
         createView();
         prepareView();
+        getcustomerdetails();
+        getdata();
 
 
         runnableCode = new Runnable() {
@@ -319,10 +370,45 @@ DefaultTrackSelector.Parameters qualityParams;
         llParentContainer = (LinearLayout) findViewById(R.id.ll_parent_container);
         frameLayoutMain = findViewById(R.id.frame_layout_main);
         findViewById(R.id.img_back_player).setOnClickListener(this);
+        downloadimage=findViewById(R.id.downloadimage);
+        rvtvid=findViewById(R.id.rvtvid);
+
+        downloadimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+                public void onClick(View v)
+                {
+
+//                    download();
+
+
+//                    ExoDownloadState exoDownloadState = (ExoDownloadState) downloadimage.getTag();
+//
+//                    exoVideoDownloadDecision(DOWNLOAD_START);
+
+                }
+        });
 
         setProgress();
+        havePermissionForWriteStorage();
     }
 
+    private boolean havePermissionForWriteStorage() {
+
+        //marshmallow runtime permission
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Log.d("Permission Allowed", "true");
+                }
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 950);
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
 
     public void prepareView() {
         playerView.setLayoutParams(
@@ -544,12 +630,12 @@ DefaultTrackSelector.Parameters qualityParams;
             case R.id.img_back_player:
                 onBackPressed();
                 break;
-//            case R.id.ll_download_video:
-//                 ExoDownloadState exoDownloadState = (ExoDownloadState) llDownloadVideo.getTag();
-//
-//                exoVideoDownloadDecision(exoDownloadState);
-//
-//                break;
+            case R.id.downloadimage:
+                 ExoDownloadState exoDownloadState = (ExoDownloadState) downloadimage.getTag();
+
+                exoVideoDownloadDecision(exoDownloadState);
+
+                break;
 
         }
 
@@ -1222,8 +1308,193 @@ DefaultTrackSelector.Parameters qualityParams;
         }
     }
 
+    private void download() {
 
 
+        String downloadPath = Environment.getExternalStorageDirectory() + "/" + "DOWNLOAD_AIO_VIDEO/";
+        File dir = new File(downloadPath);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
 
+
+        String cmd = String.format("-i %s -acodec %s -bsf:a aac_adtstoasc -vcodec %s %s", videoUrl, "copy", "copy", dir.toString() + "/bigBuckBunny.mp4");
+        String[] command = cmd.split(" ");
+        execFFmpegBinary(command);
+
+    }
+
+    private void execFFmpegBinary(String[] command) {
+        try {
+            FFmpeg ffmpeg = FFmpeg.getInstance(OnlinePlayerActivity.this);
+            ffmpeg.execute(command, new FFmpegExecuteResponseHandler() {
+                @Override
+                public void onSuccess(String message) {
+                    Log.i("TAG", "onSuccess: " + message);
+//                    progressBar.dismiss();
+                }
+
+                @Override
+                public void onProgress(String message) {
+                    Log.i("TAG", "onProgress: " + message);
+//                    progressBar.setMessage("Progressing: \n " + message);
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Log.i("TAG", "onFailure: " + message);
+//                    progressBar.dismiss();
+                }
+
+                @Override
+                public void onStart() {
+//                    progressBar.show();
+                }
+
+                @Override
+                public void onFinish() {
+//                    progressBar.dismiss();
+                }
+            });
+        } catch (FFmpegCommandAlreadyRunningException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void getdata()
+    {
+        ArrayList<com.mastervidya.mastervidya.model.VideoModel> videoModelArrayList=new ArrayList<>();
+
+        JSONObject json = new JSONObject();
+        try
+        {
+            json.put("key",sessionHandler.getuniquekey());
+            json.put("id",id);
+            json.put("chapter_id",chapter_id);
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, Url.videos, json, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                Log.d("response111",jsonObject.toString());
+                try {
+                    String status=jsonObject.getString("status");
+                    if(status.contains("success"))
+                    {
+                        JSONArray jsonArray=jsonObject.getJSONArray("data");
+                        for(int i=0;i<jsonArray.length();i++)
+                        {
+                            com.mastervidya.mastervidya.model.VideoModel videoModel=new VideoModel();
+
+                            JSONObject jsonObject1=jsonArray.getJSONObject(i);
+                            String video_id=jsonObject1.getString("video_id");
+                            String title=jsonObject1.getString("title");
+                            String url=jsonObject1.getString("url");
+                            String description=jsonObject1.getString("description");
+                            String chapter=jsonObject1.getString("chapter");
+                            String subject=jsonObject1.getString("subject");
+                            String classs=jsonObject1.getString("class");
+
+                            videoModel.setChapter(chapter);
+                            videoModel.setClasss(classs);
+                            videoModel.setSubject(subject);
+                            videoModel.setTitle(title);
+                            videoModel.setDescirption(description);
+                            videoModel.setUrl(url);
+                            videoModel.setVideoid(video_id);
+                            videoModelArrayList.add(videoModel);
+
+
+                        }
+                    }
+                    else if(status.contains("invalid api key"))
+                    {
+                        Dialog dialog;
+                        dialog = new Dialog(OnlinePlayerActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.alertdialog);
+                        dialog.setCancelable(false);
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.setCancelable(false);
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        dialog.show();
+                        LinearLayout linearLayout=dialog.findViewById(R.id.okid);
+
+
+                        linearLayout.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View view) {
+                                sessionHandler.logoutUser();
+                            }
+                        });
+
+                    }
+
+
+                    if (!videoModelArrayList.isEmpty())
+                    {
+                        VideoAdapter adapter = new VideoAdapter(videoModelArrayList,OnlinePlayerActivity.this);
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(OnlinePlayerActivity.this,RecyclerView.VERTICAL,false));
+                        recyclerView.setAdapter(adapter);
+                        rvtvid.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        rvtvid.setVisibility(View.GONE);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
+    public void getcustomerdetails()
+    {
+        Gson gson = new Gson();
+        HashMap<String, String> user = sessionHandler.getLoginSession();
+        String json = user.get(sessionHandler.KEY_LOGIN);
+        ArrayList alist = gson.fromJson(json, ArrayList.class);
+        JSONArray jsonArrA = new JSONArray(alist);
+        try
+        {
+
+            JSONObject userdata = jsonArrA.getJSONObject(0);
+            id = userdata.getString("id");
+            name = userdata.getString("name");
+            phone = userdata.getString("phone");
+            avatar_image = userdata.getString("avatar_image");
+
+        }
+
+        catch (Exception e)
+        {
+
+        }
+
+    }
 
 }

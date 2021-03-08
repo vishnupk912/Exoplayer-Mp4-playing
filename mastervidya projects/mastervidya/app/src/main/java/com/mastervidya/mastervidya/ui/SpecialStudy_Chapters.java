@@ -1,3 +1,4 @@
+
 package com.mastervidya.mastervidya.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,12 +25,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.adapter.ChapterAdapter;
-import com.mastervidya.mastervidya.adapter.VideoAdapter;
+import com.mastervidya.mastervidya.adapter.ChapterAdapter1;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
 import com.mastervidya.mastervidya.model.ChapterModel;
-import com.mastervidya.mastervidya.model.VideoModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,8 +38,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class VideoListing extends AppCompatActivity {
-
+public class SpecialStudy_Chapters extends AppCompatActivity {
     SessionHandler sessionHandler;
     String id,name,phone,avatar_image;
     Dialog dialog_progress;
@@ -47,14 +46,11 @@ public class VideoListing extends AppCompatActivity {
     String subid;
     RecyclerView recyclerView;
     TextView subnametv;
-    String chapid;
     ImageView back;
-    LinearLayout linearLayout_Quiz;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_listing);
+        setContentView(R.layout.activity_special_study__chapters);
 
         back=findViewById(R.id.back);
         dialog_progress = new Dialog(this);
@@ -72,45 +68,36 @@ public class VideoListing extends AppCompatActivity {
                 .getRequestQueue();
         subnametv=findViewById(R.id.subnametv);
         recyclerView=findViewById(R.id.rvid);
-        linearLayout_Quiz=findViewById(R.id.layquiz);
+
         Intent intent=getIntent();
-        String chapname=intent.getStringExtra("chapname");
-        chapid=intent.getStringExtra("chapter_id");
+        String subname=intent.getStringExtra("sub_name");
+        subid=intent.getStringExtra("sub_id");
 
+        subnametv.setText(subname);
 
-
-        subnametv.setText(chapname);
+        getcustomerdetails();
+        getdata();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 finish();
             }
         });
 
-        linearLayout_Quiz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1=new Intent(VideoListing.this,QuizaAcitivity.class);
-                startActivity(intent1);
-            }
-        });
-        getcustomerdetails();
-        getdata();
-
     }
+
 
     public void getdata()
     {
-        ArrayList<VideoModel> videoModelArrayList=new ArrayList<>();
+        ArrayList<ChapterModel> chapterModelArrayList=new ArrayList<>();
         dialog_progress.show();
         JSONObject json = new JSONObject();
         try
         {
             json.put("key",sessionHandler.getuniquekey());
             json.put("id",id);
-            json.put("chapter_id",chapid);
+            json.put("subject_id",subid);
 
         }
         catch (JSONException e)
@@ -119,11 +106,12 @@ public class VideoListing extends AppCompatActivity {
         }
 
 
-        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, Url.videos, json, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, Url.special_chapters, json, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                dialog_progress.dismiss();
+
                 Log.d("response",jsonObject.toString());
+                dialog_progress.dismiss();
                 try {
                     String status=jsonObject.getString("status");
                     if(status.contains("success"))
@@ -131,35 +119,24 @@ public class VideoListing extends AppCompatActivity {
                         JSONArray jsonArray=jsonObject.getJSONArray("data");
                         for(int i=0;i<jsonArray.length();i++)
                         {
-                            VideoModel videoModel=new VideoModel();
-
+                            ChapterModel chapterModel=new ChapterModel();
                             JSONObject jsonObject1=jsonArray.getJSONObject(i);
-                            String video_id=jsonObject1.getString("video_id");
-                            String title=jsonObject1.getString("title");
-                            String url=jsonObject1.getString("url");
-                            String description=jsonObject1.getString("description");
+                            String id=jsonObject1.getString("id");
                             String chapter=jsonObject1.getString("chapter");
-                            String subject=jsonObject1.getString("subject");
-                            String classs=jsonObject1.getString("class");
-                            String chapter_id=jsonObject1.getString("chapter_id");
-
-                            videoModel.setChapter(chapter);
-                            videoModel.setClasss(classs);
-                            videoModel.setSubject(subject);
-                            videoModel.setTitle(title);
-                            videoModel.setDescirption(description);
-                            videoModel.setUrl(url);
-                            videoModel.setVideoid(video_id);
-                            videoModel.setChapter_id(chapter_id);
-                            videoModelArrayList.add(videoModel);
+                            String status1=jsonObject1.getString("status");
 
 
+                            chapterModel.setChaptername(chapter);
+                            chapterModel.setId(id);
+                            chapterModel.setStatus(status1);
+
+                            chapterModelArrayList.add(chapterModel);
                         }
                     }
                     else if(status.contains("invalid api key"))
                     {
                         Dialog dialog;
-                        dialog = new Dialog(VideoListing.this);
+                        dialog = new Dialog(SpecialStudy_Chapters.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.alertdialog);
                         dialog.setCancelable(false);
@@ -171,8 +148,7 @@ public class VideoListing extends AppCompatActivity {
                         LinearLayout linearLayout=dialog.findViewById(R.id.okid);
 
 
-                        linearLayout.setOnClickListener(new View.OnClickListener()
-                        {
+                        linearLayout.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 sessionHandler.logoutUser();
@@ -182,11 +158,11 @@ public class VideoListing extends AppCompatActivity {
                     }
 
 
-                    if (!videoModelArrayList.isEmpty())
+                    if (!chapterModelArrayList.isEmpty())
                     {
-                        VideoAdapter adapter = new VideoAdapter(videoModelArrayList,VideoListing.this);
+                        ChapterAdapter1 adapter = new ChapterAdapter1(chapterModelArrayList,SpecialStudy_Chapters.this);
                         recyclerView.setHasFixedSize(true);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(VideoListing.this,RecyclerView.VERTICAL,false));
+                        recyclerView.setLayoutManager(new LinearLayoutManager(SpecialStudy_Chapters.this,RecyclerView.VERTICAL,false));
                         recyclerView.setAdapter(adapter);
 
                     }
@@ -210,6 +186,9 @@ public class VideoListing extends AppCompatActivity {
 
         requestQueue.add(jsonObjectRequest);
     }
+
+
+
 
     public void getcustomerdetails()
     {

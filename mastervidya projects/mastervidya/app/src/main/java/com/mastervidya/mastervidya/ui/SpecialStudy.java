@@ -130,6 +130,7 @@ public class SpecialStudy extends AppCompatActivity {
                                     String subject=jsonObject1.getString("subject");
                                     String image=jsonObject1.getString("image");
 
+                                    subModel.setId(sub_id);
                                     subModel.setName(subject);
                                     subModel.setImagel(image);
 
@@ -233,10 +234,14 @@ public class SpecialStudy extends AppCompatActivity {
             holder.lay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent intent=new Intent(SpecialStudy.this, Chapters.class);
-//                    intent.putExtra("sub_id",subModelArrayList.get(position).getId());
-//                    intent.putExtra("sub_name",subModelArrayList.get(position).getName());
-//                    startActivity(intent);
+
+                    Intent intent=new Intent(SpecialStudy.this, SpecialStudy_Chapters.class);
+                    intent.putExtra("sub_id",subModelArrayList.get(position).getId());
+                    intent.putExtra("sub_name",subModelArrayList.get(position).getName());
+                    startActivity(intent);
+
+                    Log.d("subid",subModelArrayList.get(position).getId());
+
                 }
             });
 

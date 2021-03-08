@@ -28,6 +28,15 @@ public class Url
     public  static  final String chapters=base_url1+"chapters";
     public  static  final String videos=base_url1+"videos";
 
+    public  static  final String special_chapters=base_url1+"special_chapters";
+
+    public  static  final String special_videos=base_url1+"special_videos";
+
+
+    public  static  final String quiz=base_url1+"quiz";
+
+
+
 
 
 }

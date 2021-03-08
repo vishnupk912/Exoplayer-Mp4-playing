@@ -14,7 +14,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,12 +22,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
-import com.mastervidya.mastervidya.adapter.ChapterAdapter;
 import com.mastervidya.mastervidya.adapter.VideoAdapter;
+import com.mastervidya.mastervidya.adapter.VideoAdapter1;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
-import com.mastervidya.mastervidya.model.ChapterModel;
 import com.mastervidya.mastervidya.model.VideoModel;
 
 import org.json.JSONArray;
@@ -38,7 +36,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class VideoListing extends AppCompatActivity {
+public class SpecialVideoListing extends AppCompatActivity {
 
     SessionHandler sessionHandler;
     String id,name,phone,avatar_image;
@@ -49,13 +47,12 @@ public class VideoListing extends AppCompatActivity {
     TextView subnametv;
     String chapid;
     ImageView back;
-    LinearLayout linearLayout_Quiz;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_listing);
-
+        setContentView(R.layout.activity_special_video_listing);
         back=findViewById(R.id.back);
         dialog_progress = new Dialog(this);
         dialog_progress.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -72,7 +69,7 @@ public class VideoListing extends AppCompatActivity {
                 .getRequestQueue();
         subnametv=findViewById(R.id.subnametv);
         recyclerView=findViewById(R.id.rvid);
-        linearLayout_Quiz=findViewById(R.id.layquiz);
+
         Intent intent=getIntent();
         String chapname=intent.getStringExtra("chapname");
         chapid=intent.getStringExtra("chapter_id");
@@ -86,14 +83,6 @@ public class VideoListing extends AppCompatActivity {
             public void onClick(View v)
             {
                 finish();
-            }
-        });
-
-        linearLayout_Quiz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1=new Intent(VideoListing.this,QuizaAcitivity.class);
-                startActivity(intent1);
             }
         });
         getcustomerdetails();
@@ -119,7 +108,7 @@ public class VideoListing extends AppCompatActivity {
         }
 
 
-        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, Url.videos, json, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, Url.special_videos, json, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 dialog_progress.dismiss();
@@ -141,7 +130,7 @@ public class VideoListing extends AppCompatActivity {
                             String chapter=jsonObject1.getString("chapter");
                             String subject=jsonObject1.getString("subject");
                             String classs=jsonObject1.getString("class");
-                            String chapter_id=jsonObject1.getString("chapter_id");
+//                            String chapter_id=jsonObject1.getString("chapter_id");
 
                             videoModel.setChapter(chapter);
                             videoModel.setClasss(classs);
@@ -150,7 +139,7 @@ public class VideoListing extends AppCompatActivity {
                             videoModel.setDescirption(description);
                             videoModel.setUrl(url);
                             videoModel.setVideoid(video_id);
-                            videoModel.setChapter_id(chapter_id);
+//                            videoModel.setChapter_id(chapter_id);
                             videoModelArrayList.add(videoModel);
 
 
@@ -159,7 +148,7 @@ public class VideoListing extends AppCompatActivity {
                     else if(status.contains("invalid api key"))
                     {
                         Dialog dialog;
-                        dialog = new Dialog(VideoListing.this);
+                        dialog = new Dialog(SpecialVideoListing.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.setContentView(R.layout.alertdialog);
                         dialog.setCancelable(false);
@@ -184,9 +173,9 @@ public class VideoListing extends AppCompatActivity {
 
                     if (!videoModelArrayList.isEmpty())
                     {
-                        VideoAdapter adapter = new VideoAdapter(videoModelArrayList,VideoListing.this);
+                        VideoAdapter1 adapter = new VideoAdapter1(videoModelArrayList,SpecialVideoListing.this);
                         recyclerView.setHasFixedSize(true);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(VideoListing.this,RecyclerView.VERTICAL,false));
+                        recyclerView.setLayoutManager(new LinearLayoutManager(SpecialVideoListing.this,RecyclerView.VERTICAL,false));
                         recyclerView.setAdapter(adapter);
 
                     }

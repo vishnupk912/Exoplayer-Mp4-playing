@@ -33,7 +33,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.VideoListing"></activity>
+        <activity android:name=".ui.QuizaAcitivity"></activity>
+        <activity android:name=".ui.SpecialVideoListing" />
+        <activity android:name=".ui.SpecialStudy_Chapters" />
+        <activity android:name=".ui.VideoListing" />
         <activity android:name=".ui.Chapters" />
         <activity android:name=".ui.PaymentPage" />
         <activity android:name=".ui.AddClass1" />
@@ -75,6 +78,20 @@
         <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_test_xOKvcKnhNOcUOg" />
+
+        <service
+            android:name=".video.DemoDownloadService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.exoplayer.downloadService.action.RESTART" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.google.android.exoplayer2.scheduler.PlatformScheduler$PlatformSchedulerService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

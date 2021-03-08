@@ -46,6 +46,7 @@ public class Chapters extends AppCompatActivity {
     String subid;
     RecyclerView recyclerView;
     TextView subnametv;
+
     ImageView back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,8 @@ public class Chapters extends AppCompatActivity {
             }
         });
 
+
+
     }
 
 
@@ -109,6 +112,7 @@ public class Chapters extends AppCompatActivity {
             JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, Url.chapters, json, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
+
                     dialog_progress.dismiss();
                     try {
                         String status=jsonObject.getString("status");
