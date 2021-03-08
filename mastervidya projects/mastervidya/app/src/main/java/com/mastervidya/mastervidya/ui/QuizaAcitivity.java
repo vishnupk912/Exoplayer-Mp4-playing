@@ -323,7 +323,7 @@ public class QuizaAcitivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                 String name=arrayList.get(position).get("option");
 
-                holder.tvans.setText(position+1+") "+name);
+                holder.tvans.setText(position+1+" ) "+name);
         }
 
         @Override
