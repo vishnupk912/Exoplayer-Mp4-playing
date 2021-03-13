@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/ts12"
+    android:layout_width="200dp"
+    android:background="@drawable/etshape"
+    android:elevation="@dimen/ts4"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/plannameid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Free Plan"
+        android:textSize="@dimen/sp16"
+        android:textColor="@color/black"
+        android:fontFamily="@font/opensansbold"
+        android:layout_marginLeft="@dimen/ts8"
+        android:layout_marginTop="@dimen/ts8"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/tvvalidityid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 days Validity"
+            android:textColor="@color/black"
+            android:textSize="@dimen/ts12"
+            android:layout_marginTop="@dimen/ts8"
+            android:fontFamily="@font/opensanssemibold"
+            android:layout_marginLeft="@dimen/ts8"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✦ Ads are disabled"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/ts8"
+            android:layout_marginTop="@dimen/ts4"
+            android:fontFamily="@font/opensansregular"
+            android:layout_marginLeft="@dimen/ts8"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✦ Get instant Legal reports"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/ts8"
+            android:layout_marginTop="@dimen/ts4"
+            android:fontFamily="@font/opensansregular"
+            android:layout_marginLeft="@dimen/ts8"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✦ Direct Communcation"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/ts8"
+            android:layout_marginTop="@dimen/ts4"
+            android:fontFamily="@font/opensansregular"
+            android:layout_marginLeft="@dimen/ts8"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✦ View nearby lawyers"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/ts8"
+            android:layout_marginTop="@dimen/ts4"
+            android:fontFamily="@font/opensansregular"
+            android:layout_marginLeft="@dimen/ts8"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✦ Consult lawyers at any time"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/ts8"
+            android:layout_marginTop="@dimen/ts4"
+            android:fontFamily="@font/opensansregular"
+            android:layout_marginLeft="@dimen/ts8"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ts1"
+            android:background="@color/grey2"
+            android:layout_marginTop="@dimen/ts24"
+            android:layout_marginLeft="@dimen/ts2"
+            android:layout_marginRight="@dimen/ts2"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ts4"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" You Pay"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/ts8"
+                android:fontFamily="@font/opensanssemibold"
+                android:layout_marginLeft="@dimen/ts8"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                >
+                <TextView
+                    android:id="@+id/amountid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs 400"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/ts12"
+                    android:layout_marginRight="@dimen/ts12"
+                    android:fontFamily="@font/opensansbold"
+                    android:layout_marginLeft="@dimen/ts8"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/paynowbtid"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ts32"
+            android:background="@drawable/buttonshape1"
+            android:layout_marginTop="@dimen/ts12"
+            android:layout_marginLeft="@dimen/ts4"
+            android:layout_marginRight="@dimen/ts4"
+            android:layout_marginBottom="@dimen/ts8"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/paytvid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PAY NOW  >"
+                android:textColor="@color/white"
+                android:textSize="@dimen/ts8"
+                android:fontFamily="@font/opensanssemibold"
+                android:layout_marginLeft="@dimen/ts8"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".QuizDetails">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:layout_width="@dimen/img6"
+                    android:layout_height="@dimen/img6"
+                    android:src="@drawable/quizimage"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✦Easy way for Analyzing Title status of the property . "
+                    android:textColor="@color/grey"
+                    android:padding="@dimen/ts8"
+                    android:textSize="@dimen/sp14"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/helveticaneuebold"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✦ It has different section and each section is to be fully answered. "
+                    android:textColor="@color/grey"
+                    android:padding="@dimen/ts8"
+                    android:textSize="@dimen/sp14"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/helveticaneuebold"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✦ After answering each section then SureTitle will show your result."
+                    android:textColor="@color/grey"
+                    android:padding="@dimen/ts8"
+                    android:textSize="@dimen/sp14"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/helveticaneuebold"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✦ For generating the legal report from the lawyer you need to be premium member. "
+                    android:textColor="@color/grey"
+                    android:padding="@dimen/ts8"
+                    android:textSize="@dimen/sp14"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/helveticaneuebold"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✦ Any issues that is faced by a non premium member will not supported by SureTitle. "
+                    android:textColor="@color/grey"
+                    android:padding="@dimen/ts8"
+                    android:textSize="@dimen/sp14"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/helveticaneuebold"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HOW WE RATE THE PROPERTY "
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/opensansbold"
+                    android:layout_marginTop="@dimen/ts12"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ts12"
+                    android:layout_marginTop="@dimen/ts16"
+                    android:layout_marginRight="@dimen/ts12"
+                    android:gravity="center_vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1 . "
+                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/opensanssemibold"
+                        android:layout_marginLeft="@dimen/ts12"
+                        />
+
+                    <ImageView
+                        android:layout_width="@dimen/ts32"
+                        android:layout_height="@dimen/ts32"
+                        android:src="@drawable/ic_winner"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SureTitle Class Badge - Riskless"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/opensanssemibold"
+                        android:layout_marginLeft="@dimen/ts12"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ts12"
+                    android:layout_marginRight="@dimen/ts12"
+                    android:layout_marginTop="@dimen/ts12"
+                    android:gravity="center_vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 . "
+                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/opensanssemibold"
+                        android:layout_marginLeft="@dimen/ts12"
+                        />
+
+                    <ImageView
+                        android:layout_width="@dimen/ts32"
+                        android:layout_height="@dimen/ts32"
+                        android:src="@drawable/goldimg"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Golden Badge - Low Risk"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/opensanssemibold"
+                        android:layout_marginLeft="@dimen/ts12"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ts12"
+                    android:layout_marginRight="@dimen/ts12"
+                    android:layout_marginTop="@dimen/ts12"
+                    android:gravity="center_vertical"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3 . "
+                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/opensanssemibold"
+                        android:layout_marginLeft="@dimen/ts12"
+                        />
+
+                    <ImageView
+                        android:layout_width="@dimen/ts32"
+                        android:layout_height="@dimen/ts32"
+                        android:src="@drawable/silverimg"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Silver Badge - Medium Risk"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/opensanssemibold"
+                        android:layout_marginLeft="@dimen/ts12"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ts12"
+                    android:layout_marginLeft="@dimen/ts12"
+                    android:layout_marginRight="@dimen/ts12"
+                    android:gravity="center_vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4 . "
+                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/opensanssemibold"
+                        android:layout_marginLeft="@dimen/ts12"
+                        />
+
+
+                    <ImageView
+                        android:layout_width="@dimen/ts32"
+                        android:layout_height="@dimen/ts32"
+                        android:src="@drawable/bronzeimg"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bronze Badge - High Risk"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:fontFamily="@font/opensanssemibold"
+                        android:layout_marginLeft="@dimen/ts12"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layid"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ts48"
+        android:background="@drawable/buttonshape1"
+        android:layout_margin="@dimen/ts12"
+        android:gravity="center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Property Analyzing"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp16"
+            android:fontFamily="@font/helveticaneuebold"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

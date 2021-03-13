@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/lay"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cat"
+        android:background="@drawable/buttonshape4"
+        android:layout_margin="@dimen/ts12"
+        android:gravity="center_vertical"
+        >
+        <ImageView
+            android:id="@+id/imageid"
+            android:layout_width="@dimen/ts40"
+            android:layout_height="@dimen/ts40"
+            android:src="@drawable/ic_doc"
+            android:layout_marginLeft="@dimen/ts12"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Report on : Land"
+                android:layout_marginLeft="@dimen/ts16"
+                android:fontFamily="@font/helveticaneuebold"
+                android:textColor="@color/black"
+                android:padding="@dimen/ts2"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Generated on : "
+                android:layout_marginLeft="@dimen/ts16"
+                android:textStyle="bold"
+                android:padding="@dimen/ts2"
+                android:fontFamily="@font/helveticaneuethin"
+                android:textColor="@color/black1"
+                android:textSize="@dimen/ts12"
+                />
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="13.07.2020"
+                android:padding="@dimen/ts2"
+                android:layout_marginLeft="@dimen/ts16"
+                android:textStyle="bold"
+                android:fontFamily="@font/helveticaneuethin"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/sp14"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+
+            >
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">SureTitle</string>
+
+    <string-array name="spinner1">
+        <item>Select Your gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="Malearray">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="Femalearray">
+        <item>Female</item>
+        <item>Male</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="Otherearray">
+        <item>Others</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="q1">Now dont worry while buying a property ,because SureTitle will analyze  the property before you own it.</string>
+</resources>
