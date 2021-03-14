@@ -94,6 +94,10 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
+
         dotsIndicator = (WormDotsIndicator) findViewById(R.id.dots_indicator);
         viewPager=findViewById(R.id.viewPager);
         lay1=findViewById(R.id.lay1);

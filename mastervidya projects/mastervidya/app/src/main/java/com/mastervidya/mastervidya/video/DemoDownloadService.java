@@ -40,9 +40,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-/**
- * A service for downloading media.
- */
+
 public class DemoDownloadService extends DownloadService implements DownloadTracker.Listener {
 
     private static final int JOB_ID = 1;

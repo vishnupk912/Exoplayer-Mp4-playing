@@ -1,6 +1,5 @@
 package com.mastervidya.mastervidya.video;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,9 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,7 +24,6 @@ import android.view.Surface;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.DownloadListener;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -37,7 +35,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.multidex.MultiDex;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,10 +47,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
-import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -65,6 +60,7 @@ import com.google.android.exoplayer2.PlaybackPreparer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
 import com.google.android.exoplayer2.offline.Download;
@@ -96,48 +92,56 @@ import com.google.android.exoplayer2.util.EventLogger;
 import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
-import com.mastervidya.mastervidya.adapter.ChapterAdapter;
 import com.mastervidya.mastervidya.adapter.VideoAdapter;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
-import com.mastervidya.mastervidya.model.ChapterModel;
 import com.mastervidya.mastervidya.model.VideoModel;
-import com.mastervidya.mastervidya.ui.Chapters;
-import com.mastervidya.mastervidya.ui.VideoListing;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-import static android.net.Uri.parse;
-import static com.google.android.exoplayer2.offline.Download.STATE_COMPLETED;
-import static com.google.android.exoplayer2.offline.Download.STATE_DOWNLOADING;
-import static com.google.android.exoplayer2.offline.Download.STATE_FAILED;
-import static com.google.android.exoplayer2.offline.Download.STATE_QUEUED;
-import static com.google.android.exoplayer2.offline.Download.STATE_REMOVING;
-import static com.google.android.exoplayer2.offline.Download.STATE_RESTARTING;
-import static com.google.android.exoplayer2.offline.Download.STATE_STOPPED;
-import static com.mastervidya.mastervidya.video.ExoDownloadState.DOWNLOAD_START;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
-/**
- * Created by Mayur Solanki (mayursolanki120@gmail.com) on 22/03/19, 1:20 PM.
- */
+
 public class OnlinePlayerActivity extends AppCompatActivity implements View.OnClickListener, PlaybackPreparer, PlayerControlView.VisibilityListener, DownloadTracker.Listener {
 
-    String id,name,phone,avatar_image;
+    private List<Download> downloadedVideoList;
+    SecretKey secret;
+    String id, name, phone, avatar_image;
 
+    ProgressDialog PD;
+    Download download;
+    List<Download> videosList = new ArrayList<>();
+    List<Object> payload = new ArrayList<>();
     TextView rvtvid;
     private static final int playerHeight = 300;
     ProgressDialog pDialog;
@@ -182,8 +186,8 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
     Boolean isScreenLandscape = false;
     List<TrackKey> trackKeys = new ArrayList<>();
     List<String> optionsToDownload = new ArrayList<String>();
-//    TrackKey trackKeyDownload;
-DefaultTrackSelector.Parameters qualityParams;
+    //    TrackKey trackKeyDownload;
+    DefaultTrackSelector.Parameters qualityParams;
     private boolean mVisible;
     private final Runnable mHideRunnable = new Runnable() {
         @Override
@@ -199,6 +203,7 @@ DefaultTrackSelector.Parameters qualityParams;
     private boolean isShowingTrackSelectionDialog;
     private DefaultTrackSelector.Parameters trackSelectorParameters;
     private TrackGroupArray lastSeenTrackGroupArray;
+    Uri keyUri;
     private TextView tvPlaybackSpeed, tvPlaybackSpeedSymbol;
     private boolean startAutoPlay;
     private int startWindow;
@@ -210,7 +215,7 @@ DefaultTrackSelector.Parameters qualityParams;
     private ImageView imgBwd;
     private ImageView exoPlay;
     private ImageView exoPause;
-    private ImageView imgFwd,imgBackPlayer;
+    private ImageView imgFwd, imgBackPlayer;
     private TextView tvPlayerCurrentTime;
     private DefaultTimeBar exoTimebar;
     private ProgressBar exoProgressbar;
@@ -220,14 +225,16 @@ DefaultTrackSelector.Parameters qualityParams;
     private RecyclerView recyclerView;
     private StringBuilder mFormatBuilder;
     private Formatter mFormatter;
+
     private DownloadTracker downloadTracker;
     private DownloadManager downloadManager;
     private DownloadHelper myDownloadHelper;
+
     RequestQueue requestQueue;
     SessionHandler sessionHandler;
     ImageView downloadimage;
     String chapter_id;
-    private String videoId,videoUrl,videoName,subjectname,chaptername,description,classname;
+    private String videoId, videoUrl, videoName, subjectname, chaptername, description, classname;
     private long videoDurationInSeconds;
     private Runnable runnableCode;
     private Handler handler;
@@ -252,9 +259,9 @@ DefaultTrackSelector.Parameters qualityParams;
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 //        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 
         dataSourceFactory = buildDataSourceFactory();
@@ -265,27 +272,27 @@ DefaultTrackSelector.Parameters qualityParams;
 
         setContentView(R.layout.activity_online_player);
 
-        Intent intent=getIntent();
-        videoUrl=intent.getStringExtra("video_url");
-        videoName=intent.getStringExtra("title");
-        chaptername=intent.getStringExtra("chapter");
-        subjectname=intent.getStringExtra("subject");
-        classname=intent.getStringExtra("class");
-        description=intent.getStringExtra("desc");
-        chapter_id=intent.getStringExtra("chapter_id");
+        Intent intent = getIntent();
+        videoUrl = intent.getStringExtra("video_url");
+        videoName = intent.getStringExtra("title");
+        chaptername = intent.getStringExtra("chapter");
+        subjectname = intent.getStringExtra("subject");
+        classname = intent.getStringExtra("class");
+        description = intent.getStringExtra("desc");
+        chapter_id = intent.getStringExtra("chapter_id");
 
-        TextView textView_title,textView_class,textView_desc;
+        TextView textView_title, textView_class, textView_desc;
         requestQueue = RequestQueueSingleton.getInstance(this)
                 .getRequestQueue();
-        recyclerView=findViewById(R.id.rvid);
-        sessionHandler=new SessionHandler(this);
-        downloadimage=findViewById(R.id.downloadimage);
-        textView_title=findViewById(R.id.titletv);
-        textView_class=findViewById(R.id.tv2);
-        textView_desc=findViewById(R.id.decsptv);
+        recyclerView = findViewById(R.id.rvid);
+        sessionHandler = new SessionHandler(this);
+        downloadimage = findViewById(R.id.downloadimage);
+        textView_title = findViewById(R.id.titletv);
+        textView_class = findViewById(R.id.tv2);
+        textView_desc = findViewById(R.id.decsptv);
 
         textView_title.setText(videoName);
-        textView_class.setText(subjectname+" | "+chaptername);
+        textView_class.setText(subjectname + " | " + chaptername);
         textView_desc.setText(description);
 
         if (savedInstanceState != null) {
@@ -340,9 +347,6 @@ DefaultTrackSelector.Parameters qualityParams;
     }
 
 
-
-
-
     protected void createView() {
         handler = new Handler();
         tvPlaybackSpeed = findViewById(R.id.tv_play_back_speed);
@@ -370,45 +374,242 @@ DefaultTrackSelector.Parameters qualityParams;
         llParentContainer = (LinearLayout) findViewById(R.id.ll_parent_container);
         frameLayoutMain = findViewById(R.id.frame_layout_main);
         findViewById(R.id.img_back_player).setOnClickListener(this);
-        downloadimage=findViewById(R.id.downloadimage);
-        rvtvid=findViewById(R.id.rvtvid);
+        downloadimage = findViewById(R.id.downloadimage);
+        rvtvid = findViewById(R.id.rvtvid);
+
+
 
         downloadimage.setOnClickListener(new View.OnClickListener() {
             @Override
-                public void onClick(View v)
-                {
-
-//                    download();
+            public void onClick(View v) {
+//                    download(videoUrl,videoName);
 
 
-//                    ExoDownloadState exoDownloadState = (ExoDownloadState) downloadimage.getTag();
-//
-//                    exoVideoDownloadDecision(DOWNLOAD_START);
+                ExoDownloadState exoDownloadState = (ExoDownloadState) downloadimage.getTag();
 
-                }
+                exoVideoDownloadDecision(exoDownloadState.DOWNLOAD_START);
+
+
+            }
         });
 
         setProgress();
-        havePermissionForWriteStorage();
+
     }
 
-    private boolean havePermissionForWriteStorage() {
+    private void exoVideoDownloadDecision(ExoDownloadState exoDownloadState) {
+        if (exoDownloadState == null || videoUrl.isEmpty()) {
+            Toast.makeText(this, "Please, Tap Again", Toast.LENGTH_SHORT).show();
 
-        //marshmallow runtime permission
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    Log.d("Permission Allowed", "true");
-                }
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 950);
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return true;
+            return;
+        }
+
+        switch (exoDownloadState) {
+
+            case DOWNLOAD_START:
+                fetchDownloadOptions();
+
+                break;
+
+            case DOWNLOAD_PAUSE:
+
+                downloadManager.addDownload(downloadTracker.getDownloadRequest(Uri.parse(videoUrl)), Download.STATE_STOPPED);
+
+//                DownloadService.sendSetStopReason(
+//                        OnlinePlayerActivity.this,
+//                        DemoDownloadService.class,
+//                        downloadTracker.getDownloadRequest(Uri.parse(videoUrl)).id,
+//                        Download.STATE_STOPPED,
+//                        /* foreground= */ false);
+
+                break;
+
+            case DOWNLOAD_RESUME:
+
+                downloadManager.addDownload(downloadTracker.getDownloadRequest(Uri.parse(videoUrl)), Download.STOP_REASON_NONE);
+//                DownloadService.sendSetStopReason(
+//                        OnlinePlayerActivity.this,
+//                        DemoDownloadService.class,
+//                        downloadTracker.getDownloadRequest(Uri.parse(videoUrl)).id,
+//                        Download.STOP_REASON_NONE,
+//                        /* foreground= */ false);
+
+                break;
+
+            case DOWNLOAD_RETRY:
+
+                break;
+
+            case DOWNLOAD_COMPLETED:
+                Toast.makeText(this, "Already Downloaded, Delete from Downloaded video ", Toast.LENGTH_SHORT).show();
+
+                break;
         }
     }
+
+    private void fetchDownloadOptions() {
+        trackKeys.clear();
+
+        if (pDialog == null || !pDialog.isShowing()) {
+            pDialog = new ProgressDialog(OnlinePlayerActivity.this);
+            pDialog.setTitle(null);
+            pDialog.setCancelable(false);
+            pDialog.setMessage("Preparing Download Options...");
+            pDialog.show();
+        }
+
+        DownloadHelper downloadHelper = DownloadHelper.forHls(OnlinePlayerActivity.this, Uri.parse(videoUrl), dataSourceFactory, new DefaultRenderersFactory(OnlinePlayerActivity.this));
+
+
+        downloadHelper.prepare(new DownloadHelper.Callback() {
+            @Override
+            public void onPrepared(DownloadHelper helper) {
+                // Preparation completes. Now other DownloadHelper methods can be called.
+                myDownloadHelper = helper;
+                for (int i = 0; i < helper.getPeriodCount(); i++) {
+                    TrackGroupArray trackGroups = helper.getTrackGroups(i);
+                    for (int j = 0; j < trackGroups.length; j++) {
+                        TrackGroup trackGroup = trackGroups.get(j);
+                        for (int k = 0; k < trackGroup.length; k++) {
+                            Format track = trackGroup.getFormat(k);
+                            if (shouldDownload(track)) {
+                                trackKeys.add(new TrackKey(trackGroups, trackGroup, track));
+                            }
+                        }
+                    }
+                }
+
+
+                if (pDialog != null && pDialog.isShowing()) {
+                    pDialog.dismiss();
+                }
+
+
+                optionsToDownload.clear();
+                showDownloadOptionsDialog(myDownloadHelper, trackKeys);
+            }
+
+            @Override
+            public void onPrepareError(DownloadHelper helper, IOException e) {
+
+            }
+        });
+
+    }
+
+    private void showDownloadOptionsDialog(DownloadHelper helper, List<TrackKey> trackKeyss) {
+
+        if (helper == null) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(OnlinePlayerActivity.this);
+        builder.setTitle("Select Download Format");
+        int checkedItem = 1;
+
+
+        for (int i = 0; i < trackKeyss.size(); i++) {
+            TrackKey trackKey = trackKeyss.get(i);
+            long bitrate = trackKey.getTrackFormat().bitrate;
+            long getInBytes = (bitrate * videoDurationInSeconds) / 8;
+            String getInMb = AppUtil.formatFileSize(getInBytes);
+            String videoResoultionDashSize = " " + trackKey.getTrackFormat().height + "      (" + getInMb + ")";
+            optionsToDownload.add(i, videoResoultionDashSize);
+        }
+
+        // Initialize a new array adapter instance
+        ArrayAdapter arrayAdapter = new ArrayAdapter<String>(
+                OnlinePlayerActivity.this, // Context
+                android.R.layout.simple_list_item_single_choice, // Layout
+                optionsToDownload // List
+        );
+
+        TrackKey trackKey = trackKeyss.get(0);
+        qualityParams = ((DefaultTrackSelector) trackSelector).getParameters().buildUpon()
+                .setMaxVideoSize(trackKey.getTrackFormat().width, trackKey.getTrackFormat().height)
+                .setMaxVideoBitrate(trackKey.getTrackFormat().bitrate)
+                .build();
+
+        builder.setSingleChoiceItems(arrayAdapter, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                TrackKey trackKey = trackKeyss.get(i);
+
+                qualityParams = ((DefaultTrackSelector) trackSelector).getParameters().buildUpon()
+                        .setMaxVideoSize(trackKey.getTrackFormat().width, trackKey.getTrackFormat().height)
+                        .setMaxVideoBitrate(trackKey.getTrackFormat().bitrate)
+                        .build();
+
+
+            }
+        });
+        // Set the a;ert dialog positive button
+        builder.setPositiveButton("Download", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+
+
+                for (int periodIndex = 0; periodIndex < helper.getPeriodCount(); periodIndex++) {
+                    MappingTrackSelector.MappedTrackInfo mappedTrackInfo = helper.getMappedTrackInfo(/* periodIndex= */ periodIndex);
+                    helper.clearTrackSelections(periodIndex);
+                    for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
+//                        TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(i);
+                        helper.addTrackSelection(
+                                periodIndex,
+                                qualityParams);
+                    }
+
+                }
+
+
+                DownloadRequest downloadRequest = helper.getDownloadRequest(Util.getUtf8Bytes(videoUrl));
+                if (downloadRequest.streamKeys.isEmpty()) {
+                    // All tracks were deselected in the dialog. Don't start the download.
+                    return;
+                }
+
+
+                startDownload(downloadRequest);
+
+                dialogInterface.dismiss();
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(true);
+        dialog.show();
+    }
+
+    private void startDownload(DownloadRequest downloadRequestt) {
+
+        DownloadRequest myDownloadRequest = downloadRequestt;
+
+        //       downloadManager.addDownload(downloadRequestt);
+
+        if (myDownloadRequest.uri.toString().isEmpty()) {
+            Toast.makeText(this, "Try Again!!", Toast.LENGTH_SHORT).show();
+
+            return;
+        } else {
+
+
+//            DownloadRequest downloadRequest = new DownloadRequest(
+//                    statusId,
+//                    DownloadRequest.TYPE_PROGRESSIVE,
+//                    Uri.parse(videoUrl),
+//                    /* streamKeys= */ Collections.emptyList(),
+//                    /* customCacheKey= */ null,
+//                    null);
+
+
+            downloadManager.addDownload(myDownloadRequest);
+
+        }
+
+
+    }
+
 
     public void prepareView() {
         playerView.setLayoutParams(
@@ -420,7 +621,6 @@ DefaultTrackSelector.Parameters qualityParams;
 
 
         frameLayoutMain.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
-
 
 
     }
@@ -512,7 +712,7 @@ DefaultTrackSelector.Parameters qualityParams;
     }
 
 
-// OnClickListener methods
+    // OnClickListener methods
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -631,9 +831,7 @@ DefaultTrackSelector.Parameters qualityParams;
                 onBackPressed();
                 break;
             case R.id.downloadimage:
-                 ExoDownloadState exoDownloadState = (ExoDownloadState) downloadimage.getTag();
 
-                exoVideoDownloadDecision(exoDownloadState);
 
                 break;
 
@@ -642,225 +840,6 @@ DefaultTrackSelector.Parameters qualityParams;
 
     }
 
-    private void exoVideoDownloadDecision(ExoDownloadState exoDownloadState){
-        if(exoDownloadState == null || videoUrl.isEmpty()) {
-            Toast.makeText(this, "Please, Tap Again", Toast.LENGTH_SHORT).show();
-
-            return;
-        }
-
-        switch (exoDownloadState) {
-
-            case DOWNLOAD_START:
-                fetchDownloadOptions();
-
-                break;
-
-            case DOWNLOAD_PAUSE:
-
-                downloadManager.addDownload(downloadTracker.getDownloadRequest(Uri.parse(videoUrl)), Download.STATE_STOPPED);
-
-//                DownloadService.sendSetStopReason(
-//                        OnlinePlayerActivity.this,
-//                        DemoDownloadService.class,
-//                        downloadTracker.getDownloadRequest(Uri.parse(videoUrl)).id,
-//                        Download.STATE_STOPPED,
-//                        /* foreground= */ false);
-
-                break;
-
-            case DOWNLOAD_RESUME:
-
-                downloadManager.addDownload(downloadTracker.getDownloadRequest(Uri.parse(videoUrl)), Download.STOP_REASON_NONE);
-//                DownloadService.sendSetStopReason(
-//                        OnlinePlayerActivity.this,
-//                        DemoDownloadService.class,
-//                        downloadTracker.getDownloadRequest(Uri.parse(videoUrl)).id,
-//                        Download.STOP_REASON_NONE,
-//                        /* foreground= */ false);
-
-                break;
-
-            case DOWNLOAD_RETRY:
-
-                break;
-
-            case DOWNLOAD_COMPLETED:
-                Toast.makeText(this, "Already Downloaded, Delete from Downloaded video ", Toast.LENGTH_SHORT).show();
-
-                break;
-        }
-    }
-
-
-
-
-
-    private void fetchDownloadOptions() {
-        trackKeys.clear();
-
-        if (pDialog == null || !pDialog.isShowing()) {
-            pDialog = new ProgressDialog(OnlinePlayerActivity.this);
-            pDialog.setTitle(null);
-            pDialog.setCancelable(false);
-            pDialog.setMessage("Preparing Download Options...");
-            pDialog.show();
-        }
-
-
-        DownloadHelper downloadHelper = DownloadHelper.forHls(OnlinePlayerActivity.this, Uri.parse(videoUrl), dataSourceFactory, new DefaultRenderersFactory(OnlinePlayerActivity.this));
-
-
-        downloadHelper.prepare(new DownloadHelper.Callback() {
-            @Override
-            public void onPrepared(DownloadHelper helper) {
-                // Preparation completes. Now other DownloadHelper methods can be called.
-                myDownloadHelper = helper;
-                for (int i = 0; i < helper.getPeriodCount(); i++) {
-                    TrackGroupArray trackGroups = helper.getTrackGroups(i);
-                    for (int j = 0; j < trackGroups.length; j++) {
-                        TrackGroup trackGroup = trackGroups.get(j);
-                        for (int k = 0; k < trackGroup.length; k++) {
-                            Format track = trackGroup.getFormat(k);
-                            if (shouldDownload(track)) {
-                                trackKeys.add(new TrackKey(trackGroups, trackGroup, track));
-                            }
-                        }
-                    }
-                }
-
-
-
-                if (pDialog != null && pDialog.isShowing()) {
-                    pDialog.dismiss();
-                }
-
-
-                optionsToDownload.clear();
-                showDownloadOptionsDialog(myDownloadHelper, trackKeys);
-            }
-
-            @Override
-            public void onPrepareError(DownloadHelper helper, IOException e) {
-
-            }
-        });
-    }
-
-    private void showDownloadOptionsDialog(DownloadHelper helper, List<TrackKey> trackKeyss) {
-
-        if (helper == null) {
-            return;
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(OnlinePlayerActivity.this);
-        builder.setTitle("Select Download Format");
-        int checkedItem = 1;
-
-
-        for (int i = 0; i < trackKeyss.size(); i++) {
-            TrackKey trackKey = trackKeyss.get(i);
-            long bitrate = trackKey.getTrackFormat().bitrate;
-            long getInBytes =  (bitrate * videoDurationInSeconds)/8;
-             String getInMb = AppUtil.formatFileSize(getInBytes);
-             String videoResoultionDashSize =  " "+trackKey.getTrackFormat().height +"      ("+getInMb+")";
-             optionsToDownload.add(i, videoResoultionDashSize);
-        }
-
-        // Initialize a new array adapter instance
-        ArrayAdapter arrayAdapter = new ArrayAdapter<String>(
-                OnlinePlayerActivity.this, // Context
-                android.R.layout.simple_list_item_single_choice, // Layout
-                optionsToDownload // List
-        );
-
-        TrackKey trackKey = trackKeyss.get(0);
-        qualityParams = ((DefaultTrackSelector) trackSelector).getParameters().buildUpon()
-                .setMaxVideoSize(trackKey.getTrackFormat().width, trackKey.getTrackFormat().height)
-                .setMaxVideoBitrate(trackKey.getTrackFormat().bitrate)
-                .build();
-
-        builder.setSingleChoiceItems(arrayAdapter, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                TrackKey trackKey = trackKeyss.get(i);
-
-                qualityParams = ((DefaultTrackSelector) trackSelector).getParameters().buildUpon()
-                        .setMaxVideoSize(trackKey.getTrackFormat().width, trackKey.getTrackFormat().height)
-                        .setMaxVideoBitrate(trackKey.getTrackFormat().bitrate)
-                        .build();
-
-
-
-            }
-        });
-        // Set the a;ert dialog positive button
-        builder.setPositiveButton("Download", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-
-
-                for (int periodIndex = 0; periodIndex < helper.getPeriodCount(); periodIndex++) {
-                    MappingTrackSelector.MappedTrackInfo mappedTrackInfo = helper.getMappedTrackInfo(/* periodIndex= */ periodIndex);
-                    helper.clearTrackSelections(periodIndex);
-                    for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
-//                        TrackGroupArray rendererTrackGroups = mappedTrackInfo.getTrackGroups(i);
-                        helper.addTrackSelection(
-                                periodIndex,
-                                qualityParams);
-                    }
-
-                }
-
-
-
-                DownloadRequest downloadRequest = helper.getDownloadRequest(Util.getUtf8Bytes(videoUrl));
-                if (downloadRequest.streamKeys.isEmpty()) {
-                    // All tracks were deselected in the dialog. Don't start the download.
-                    return;
-                }
-
-
-                startDownload(downloadRequest);
-
-                dialogInterface.dismiss();
-
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(true);
-        dialog.show();
-    }
-
-    private void startDownload(DownloadRequest downloadRequestt) {
-
-        DownloadRequest myDownloadRequest = downloadRequestt;
-
-        //       downloadManager.addDownload(downloadRequestt);
-
-        if (myDownloadRequest.uri.toString().isEmpty()) {
-            Toast.makeText(this, "Try Again!!", Toast.LENGTH_SHORT).show();
-
-            return;
-        } else {
-
-
-//            DownloadRequest downloadRequest = new DownloadRequest(
-//                    statusId,
-//                    DownloadRequest.TYPE_PROGRESSIVE,
-//                    Uri.parse(videoUrl),
-//                    /* streamKeys= */ Collections.emptyList(),
-//                    /* customCacheKey= */ null,
-//                    null);
-
-
-            downloadManager.addDownload(myDownloadRequest);
-
-        }
-
-
-    }
 
     @Override
     public void preparePlayback() {
@@ -873,8 +852,8 @@ DefaultTrackSelector.Parameters qualityParams;
 
         TrackSelection.Factory trackSelectionFactory = new AdaptiveTrackSelection.Factory();
 
-    //    DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this, null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
-        RenderersFactory renderersFactory =  ((AdaptiveExoplayer) getApplication()).buildRenderersFactory(true)  ;
+        //    DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this, null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
+        RenderersFactory renderersFactory = ((AdaptiveExoplayer) getApplication()).buildRenderersFactory(true);
 
         trackSelector = new DefaultTrackSelector(trackSelectionFactory);
         trackSelector.setParameters(trackSelectorParameters);
@@ -897,13 +876,52 @@ DefaultTrackSelector.Parameters qualityParams;
         player.addAnalyticsListener(new EventLogger(trackSelector));
         playerView.setPlayer(player);
         playerView.setPlaybackPreparer(this);
-
         mediaSource = buildMediaSource(Uri.parse(videoUrl));
-        if(player != null){
+        if (player != null)
+        {
             player.prepare(mediaSource, false, true);
         }
 
 
+        for (Map.Entry<Uri, Download> entry : AdaptiveExoplayer.getInstance().getDownloadTracker().downloads.entrySet())
+        {
+             keyUri = entry.getKey();
+             download = entry.getValue();
+            Toast.makeText(this, "keyuri"+keyUri+":"+"videoUrl"+videoUrl, Toast.LENGTH_SHORT).show();
+
+            if(download.state==Download.STATE_COMPLETED)
+            {
+
+
+                Toast.makeText(this, download.request.id, Toast.LENGTH_SHORT).show();
+                downloadimage.setImageDrawable(getResources().getDrawable(R.drawable.ic_downloded));
+
+                ImageView viewvideo;
+                viewvideo=findViewById(R.id.viewvideo);
+
+                viewvideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(OnlinePlayerActivity.this,OfflinePlayerActivity.class);
+                        intent.putExtra("video_title",videoName);
+                        intent.putExtra("video_url",download.request.id);
+                        startActivity(intent);
+                    }
+                });
+            }
+
+            else
+            {
+
+                downloadimage.setImageDrawable(getResources().getDrawable(R.drawable.download));
+            }
+
+        }
+
+
+
+
+        loadVideos();
 
 
         updateButtonVisibilities();
@@ -913,7 +931,7 @@ DefaultTrackSelector.Parameters qualityParams;
     }
 
     private boolean shouldDownload(Format track) {
-       return track.height != 240 && track.sampleMimeType.equalsIgnoreCase("video/avc");
+        return track.height != 240 && track.sampleMimeType.equalsIgnoreCase("video/avc");
     }
 
     private MediaSource buildMediaSource(Uri uri) {
@@ -1140,10 +1158,6 @@ DefaultTrackSelector.Parameters qualityParams;
     }
 
 
-
-
-
-
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     public void onBackPressed() {
@@ -1168,7 +1182,7 @@ DefaultTrackSelector.Parameters qualityParams;
 
 
         } else {
-             OnlinePlayerActivity.this.finish();
+            OnlinePlayerActivity.this.finish();
             super.onBackPressed();
         }
 
@@ -1308,101 +1322,41 @@ DefaultTrackSelector.Parameters qualityParams;
         }
     }
 
-    private void download() {
 
-
-        String downloadPath = Environment.getExternalStorageDirectory() + "/" + "DOWNLOAD_AIO_VIDEO/";
-        File dir = new File(downloadPath);
-        if (!dir.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            dir.mkdirs();
-        }
-
-
-        String cmd = String.format("-i %s -acodec %s -bsf:a aac_adtstoasc -vcodec %s %s", videoUrl, "copy", "copy", dir.toString() + "/bigBuckBunny.mp4");
-        String[] command = cmd.split(" ");
-        execFFmpegBinary(command);
-
-    }
-
-    private void execFFmpegBinary(String[] command) {
-        try {
-            FFmpeg ffmpeg = FFmpeg.getInstance(OnlinePlayerActivity.this);
-            ffmpeg.execute(command, new FFmpegExecuteResponseHandler() {
-                @Override
-                public void onSuccess(String message) {
-                    Log.i("TAG", "onSuccess: " + message);
-//                    progressBar.dismiss();
-                }
-
-                @Override
-                public void onProgress(String message) {
-                    Log.i("TAG", "onProgress: " + message);
-//                    progressBar.setMessage("Progressing: \n " + message);
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    Log.i("TAG", "onFailure: " + message);
-//                    progressBar.dismiss();
-                }
-
-                @Override
-                public void onStart() {
-//                    progressBar.show();
-                }
-
-                @Override
-                public void onFinish() {
-//                    progressBar.dismiss();
-                }
-            });
-        } catch (FFmpegCommandAlreadyRunningException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void getdata()
-    {
-        ArrayList<com.mastervidya.mastervidya.model.VideoModel> videoModelArrayList=new ArrayList<>();
+    public void getdata() {
+        ArrayList<com.mastervidya.mastervidya.model.VideoModel> videoModelArrayList = new ArrayList<>();
 
         JSONObject json = new JSONObject();
-        try
-        {
-            json.put("key",sessionHandler.getuniquekey());
-            json.put("id",id);
-            json.put("chapter_id",chapter_id);
+        try {
+            json.put("key", sessionHandler.getuniquekey());
+            json.put("id", id);
+            json.put("chapter_id", chapter_id);
 
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
 
-        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, Url.videos, json, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Url.videos, json, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
 
-                Log.d("response111",jsonObject.toString());
+                Log.d("response111", jsonObject.toString());
                 try {
-                    String status=jsonObject.getString("status");
-                    if(status.contains("success"))
-                    {
-                        JSONArray jsonArray=jsonObject.getJSONArray("data");
-                        for(int i=0;i<jsonArray.length();i++)
-                        {
-                            com.mastervidya.mastervidya.model.VideoModel videoModel=new VideoModel();
+                    String status = jsonObject.getString("status");
+                    if (status.contains("success")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            com.mastervidya.mastervidya.model.VideoModel videoModel = new VideoModel();
 
-                            JSONObject jsonObject1=jsonArray.getJSONObject(i);
-                            String video_id=jsonObject1.getString("video_id");
-                            String title=jsonObject1.getString("title");
-                            String url=jsonObject1.getString("url");
-                            String description=jsonObject1.getString("description");
-                            String chapter=jsonObject1.getString("chapter");
-                            String subject=jsonObject1.getString("subject");
-                            String classs=jsonObject1.getString("class");
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            String video_id = jsonObject1.getString("video_id");
+                            String title = jsonObject1.getString("title");
+                            String url = jsonObject1.getString("url");
+                            String description = jsonObject1.getString("description");
+                            String chapter = jsonObject1.getString("chapter");
+                            String subject = jsonObject1.getString("subject");
+                            String classs = jsonObject1.getString("class");
 
                             videoModel.setChapter(chapter);
                             videoModel.setClasss(classs);
@@ -1415,9 +1369,7 @@ DefaultTrackSelector.Parameters qualityParams;
 
 
                         }
-                    }
-                    else if(status.contains("invalid api key"))
-                    {
+                    } else if (status.contains("invalid api key")) {
                         Dialog dialog;
                         dialog = new Dialog(OnlinePlayerActivity.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1428,11 +1380,10 @@ DefaultTrackSelector.Parameters qualityParams;
                         dialog.setCanceledOnTouchOutside(false);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         dialog.show();
-                        LinearLayout linearLayout=dialog.findViewById(R.id.okid);
+                        LinearLayout linearLayout = dialog.findViewById(R.id.okid);
 
 
-                        linearLayout.setOnClickListener(new View.OnClickListener()
-                        {
+                        linearLayout.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 sessionHandler.logoutUser();
@@ -1442,16 +1393,13 @@ DefaultTrackSelector.Parameters qualityParams;
                     }
 
 
-                    if (!videoModelArrayList.isEmpty())
-                    {
-                        VideoAdapter adapter = new VideoAdapter(videoModelArrayList,OnlinePlayerActivity.this);
+                    if (!videoModelArrayList.isEmpty()) {
+                        VideoAdapter adapter = new VideoAdapter(videoModelArrayList, OnlinePlayerActivity.this);
                         recyclerView.setHasFixedSize(true);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(OnlinePlayerActivity.this,RecyclerView.VERTICAL,false));
+                        recyclerView.setLayoutManager(new LinearLayoutManager(OnlinePlayerActivity.this, RecyclerView.VERTICAL, false));
                         recyclerView.setAdapter(adapter);
                         rvtvid.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
+                    } else {
                         rvtvid.setVisibility(View.GONE);
                     }
 
@@ -1472,15 +1420,13 @@ DefaultTrackSelector.Parameters qualityParams;
     }
 
 
-    public void getcustomerdetails()
-    {
+    public void getcustomerdetails() {
         Gson gson = new Gson();
         HashMap<String, String> user = sessionHandler.getLoginSession();
         String json = user.get(sessionHandler.KEY_LOGIN);
         ArrayList alist = gson.fromJson(json, ArrayList.class);
         JSONArray jsonArrA = new JSONArray(alist);
-        try
-        {
+        try {
 
             JSONObject userdata = jsonArrA.getJSONObject(0);
             id = userdata.getString("id");
@@ -1488,13 +1434,104 @@ DefaultTrackSelector.Parameters qualityParams;
             phone = userdata.getString("phone");
             avatar_image = userdata.getString("avatar_image");
 
-        }
-
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
 
     }
 
-}
+
+    public void download(String videoUrl, String filename) {
+
+
+        String rootDir = Environment.getExternalStorageDirectory()
+                + File.separator + "Video_Mastervidya";
+
+        AndroidNetworking.download("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", rootDir, filename)
+                .setTag("downloadTest")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+
+                    }
+                })
+                .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
+    }
+
+
+    public void download1(String videoUrl, String videoname) {
+        class ProgressBack extends AsyncTask<String, String, String> {
+            ProgressDialog PD;
+
+            @Override
+            protected void onPreExecute() {
+                ProgressDialog PD;
+                PD = ProgressDialog.show(OnlinePlayerActivity.this, null, "Please Wait ...", true);
+                PD.setCancelable(true);
+            }
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                downloadFile("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", videoname);
+
+                return null;
+            }
+
+            protected void onPostExecute(Boolean result) {
+                PD.dismiss();
+
+            }
+
+            private void downloadFile(String fileURL, String fileName) {
+                try {
+                    String rootDir = Environment.getExternalStorageDirectory()
+                            + File.separator + "Video";
+                    File rootFile = new File(rootDir);
+                    rootFile.mkdir();
+                    URL url = new URL(fileURL);
+                    HttpURLConnection c = (HttpURLConnection) url.openConnection();
+                    c.setRequestMethod("GET");
+                    c.setDoOutput(true);
+                    c.connect();
+                    FileOutputStream f = new FileOutputStream(new File(rootFile,
+                            fileName));
+                    InputStream in = c.getInputStream();
+                    byte[] buffer = new byte[1024];
+                    int len1 = 0;
+                    while ((len1 = in.read(buffer)) > 0) {
+                        f.write(buffer, 0, len1);
+                    }
+                    f.close();
+                } catch (IOException e) {
+                    Log.d("Error....", e.toString());
+                }
+            }
+
+        }
+
+
+    }
+
+    private void loadVideos() {
+
+
+
+        }
+
+
+
+    }
+

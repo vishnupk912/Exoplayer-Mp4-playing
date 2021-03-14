@@ -63,6 +63,7 @@ dependencies {
     implementation  'com.razorpay:checkout:1.5.16'
     implementation 'com.writingminds:FFmpegAndroid:0.3.2'
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
+    implementation 'com.amitshekhar.android:jackson-android-networking:1.0.2'
 
 
 }

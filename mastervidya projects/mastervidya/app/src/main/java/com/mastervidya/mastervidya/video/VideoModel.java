@@ -1,8 +1,6 @@
 package com.mastervidya.mastervidya.video;
 
-/**
- * Created by Mayur Solanki (mayursolanki120@gmail.com) on 22/06/20, 12:05 AM.
- */
+
 public class VideoModel {
 
     private String videoId;

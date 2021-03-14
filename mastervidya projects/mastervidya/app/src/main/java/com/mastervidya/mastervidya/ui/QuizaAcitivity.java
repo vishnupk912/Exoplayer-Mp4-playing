@@ -80,6 +80,8 @@ public class QuizaAcitivity extends AppCompatActivity {
         sessionHandler=new SessionHandler(this);
         getcustomerdetails();
 
+        viewPager2.setUserInputEnabled(false);
+
         getquestions();
 
     }
