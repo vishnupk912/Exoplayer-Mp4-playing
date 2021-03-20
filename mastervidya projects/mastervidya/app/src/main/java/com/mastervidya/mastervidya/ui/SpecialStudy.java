@@ -89,7 +89,6 @@ public class SpecialStudy extends AppCompatActivity {
             }
         });
 
-        Log.d("id",id);
         Log.d("key",sessionHandler.getuniquekey());
     }
 
