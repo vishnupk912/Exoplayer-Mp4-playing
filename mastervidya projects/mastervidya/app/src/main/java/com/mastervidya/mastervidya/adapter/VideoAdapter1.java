@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mastervidya.mastervidya.R;
-import com.mastervidya.mastervidya.model.VideoModel;
+import com.mastervidya.mastervidya.model.VideoModel1;
 import com.mastervidya.mastervidya.video.OnlinePlayerActivity;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ import java.util.ArrayList;
 public class VideoAdapter1 extends RecyclerView.Adapter<VideoAdapter1.ViewHolder>
 {
 
-    ArrayList<VideoModel>  videoModelArrayList=new ArrayList<>();
+    ArrayList<VideoModel1>  videoModelArrayList=new ArrayList<>();
     Context context;
 
-    public VideoAdapter1(ArrayList<VideoModel> videoModelArrayList, Context context) {
+    public VideoAdapter1(ArrayList<VideoModel1> videoModelArrayList, Context context) {
         this.videoModelArrayList = videoModelArrayList;
         this.context = context;
     }

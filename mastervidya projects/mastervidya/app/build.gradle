@@ -64,6 +64,8 @@ dependencies {
     implementation 'com.writingminds:FFmpegAndroid:0.3.2'
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
     implementation 'com.amitshekhar.android:jackson-android-networking:1.0.2'
+    implementation 'com.mdgiitr.suyash:graphkit:0.9.0'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 
 
 }

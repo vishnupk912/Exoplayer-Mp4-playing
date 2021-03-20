@@ -12,20 +12,21 @@
 
     <TextView
         android:id="@+id/tv_video_title"
-        android:layout_marginLeft="@dimen/ts2"
-        android:layout_marginRight="@dimen/ts2"
+        android:layout_marginLeft="@dimen/ts12"
+        android:layout_marginRight="@dimen/ts12"
         android:layout_marginBottom="@dimen/ts2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:text=""
+        android:fontFamily="@font/poppinssemibold"
         android:textColor="@color/colorprimary"
-        android:textSize="@dimen/ts14" />
+        android:textSize="@dimen/ts16" />
 
     <LinearLayout
         android:id="@+id/ll_start_download"
-        android:layout_marginLeft="@dimen/ts2"
-        android:layout_marginRight="@dimen/ts2"
+        android:layout_marginLeft="@dimen/ts12"
+        android:layout_marginRight="@dimen/ts12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
@@ -37,7 +38,7 @@
             android:layout_width="@dimen/ts24"
             android:layout_height="@dimen/ts24"
             android:layout_marginRight="32dp"
-            android:src="@drawable/ic_arrow"
+            android:src="@drawable/ic_savedvideos"
             tools:ignore="VectorDrawableCompat" />
 
         <TextView
@@ -46,13 +47,14 @@
             android:layout_gravity="center_vertical"
             android:text="Start Download"
             android:textColor="#737373"
-            android:textSize="@dimen/ts12" />
+            android:fontFamily="@font/poppinssemibold"
+            android:textSize="@dimen/ts14" />
 
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ll_pause_download"
-        android:layout_marginLeft="@dimen/ts2"
-        android:layout_marginRight="@dimen/ts2"
+        android:layout_marginLeft="@dimen/ts12"
+        android:layout_marginRight="@dimen/ts12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
@@ -64,7 +66,7 @@
             android:layout_width="@dimen/ts24"
             android:layout_height="@dimen/ts24"
             android:layout_marginRight="32dp"
-            android:src="@drawable/exo_icon_pause"
+            android:src="@drawable/ic_savedvideos"
              />
 
         <TextView
@@ -73,7 +75,8 @@
             android:layout_gravity="center_vertical"
             android:text="Pause Download"
             android:textColor="#737373"
-            android:textSize="@dimen/ts12" />
+            android:fontFamily="@font/poppinssemibold"
+            android:textSize="@dimen/ts14"  />
 
     </LinearLayout>
 
@@ -92,7 +95,7 @@
             android:layout_width="@dimen/ts24"
             android:layout_height="@dimen/ts24"
             android:layout_marginRight="32dp"
-            android:src="@drawable/exo_controls_play"
+            android:src="@drawable/ic_savedvideos"
              />
 
         <TextView
@@ -101,14 +104,15 @@
             android:layout_gravity="center_vertical"
             android:text="Resume Download"
             android:textColor="#737373"
-            android:textSize="@dimen/ts24" />
+            android:fontFamily="@font/poppinssemibold"
+            android:textSize="@dimen/ts14" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_delete_download"
-        android:layout_marginLeft="@dimen/ts24"
-        android:layout_marginRight="@dimen/ts24"
+        android:layout_marginLeft="@dimen/ts12"
+        android:layout_marginRight="@dimen/ts12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
@@ -120,7 +124,7 @@
             android:layout_width="@dimen/ts24"
             android:layout_height="@dimen/ts24"
             android:layout_marginRight="32dp"
-            android:src="@drawable/ic_send"
+            android:src="@drawable/ic_savedvideos"
              />
 
         <TextView
@@ -129,7 +133,8 @@
             android:layout_gravity="center_vertical"
             android:text="Delete Download"
             android:textColor="#737373"
-            android:textSize="@dimen/ts12" />
+            android:fontFamily="@font/poppinssemibold"
+            android:textSize="@dimen/ts14"  />
 
     </LinearLayout>
 

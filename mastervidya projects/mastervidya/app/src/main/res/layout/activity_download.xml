@@ -1,11 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/specialstudycorner4"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
+    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ts48"
+        android:gravity="center_vertical"
+        >
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/ts32"
+            android:layout_height="@dimen/ts32"
+            android:src="@drawable/ic_leftarrow1"
+            android:layout_marginLeft="@dimen/ts12"
+            />
+        <TextView
+            android:id="@+id/subnametv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Downloads"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/colorprimarydark"
+            android:fontFamily="@font/poppinssemibold"
+            android:textSize="@dimen/sp16"
+            android:layout_marginLeft="@dimen/ts12"
+            />
+
+
+
+    </LinearLayout>
+
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ts48"
+        android:background="@drawable/etshape"
+        android:layout_marginLeft="@dimen/ts24"
+        android:layout_marginTop="@dimen/ts12"
+        android:elevation="@dimen/ts12"
+        android:layout_marginRight="@dimen/ts24"
+        />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_downloaded_video"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </androidx.recyclerview.widget.RecyclerView>
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:layout_marginTop="@dimen/ts12"
+        />
+
+</LinearLayout>

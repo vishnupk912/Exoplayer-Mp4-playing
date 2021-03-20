@@ -33,7 +33,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.QuizaAcitivity"></activity>
+        <activity android:name=".ui.ViewAnswer"></activity>
+        <activity android:name=".ui.QuizResult" />
+        <activity android:name=".ui.Quizinfo" />
+        <activity android:name=".ui.QuizaAcitivity" />
         <activity android:name=".ui.SpecialVideoListing" />
         <activity android:name=".ui.SpecialStudy_Chapters" />
         <activity android:name=".ui.VideoListing" />
@@ -57,15 +60,13 @@
             android:name=".ui.IntroPage"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
-        <activity android:name=".video.OfflinePlayerActivity"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".video.OfflinePlayerActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
-            tools:ignore="LockedOrientationActivity"
-            />
-
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.Splashscreen"
             android:screenOrientation="portrait"
@@ -83,6 +84,21 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".video.DownloadActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <receiver
+            android:name=".services.SMSListener"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVE" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.razorpay.ApiKey"

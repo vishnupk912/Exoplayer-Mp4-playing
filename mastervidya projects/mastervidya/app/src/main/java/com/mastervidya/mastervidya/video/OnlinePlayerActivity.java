@@ -1,13 +1,17 @@
 package com.mastervidya.mastervidya.video;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -32,9 +36,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
 import androidx.multidex.MultiDex;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,11 +50,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.DownloadListener;
-import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -60,7 +61,6 @@ import com.google.android.exoplayer2.PlaybackPreparer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
 import com.google.android.exoplayer2.offline.Download;
@@ -92,11 +92,12 @@ import com.google.android.exoplayer2.util.EventLogger;
 import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
+import com.mastervidya.mastervidya.adapter.DownloadedVideoAdapter;
 import com.mastervidya.mastervidya.adapter.VideoAdapter;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
-import com.mastervidya.mastervidya.model.VideoModel;
+import com.mastervidya.mastervidya.model.VideoModel1;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,42 +107,35 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.InvalidParameterSpecException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 
 public class OnlinePlayerActivity extends AppCompatActivity implements View.OnClickListener, PlaybackPreparer, PlayerControlView.VisibilityListener, DownloadTracker.Listener {
 
+    public  List<VideoModel> videoModels = new ArrayList<>();
     private List<Download> downloadedVideoList;
+    private DownloadedVideoAdapter downloadedVideoAdapter;
+
+    public static final int PERMISSION_STORAGE_CODE = 1000;
     SecretKey secret;
     String id, name, phone, avatar_image;
 
     ProgressDialog PD;
     Download download;
-    List<Download> videosList = new ArrayList<>();
-    List<Object> payload = new ArrayList<>();
     TextView rvtvid;
     private static final int playerHeight = 300;
     ProgressDialog pDialog;
@@ -230,11 +224,13 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
     private DownloadManager downloadManager;
     private DownloadHelper myDownloadHelper;
 
+
+    android.app.DownloadManager downloadManager1;
     RequestQueue requestQueue;
     SessionHandler sessionHandler;
     ImageView downloadimage;
     String chapter_id;
-    private String videoId, videoUrl, videoName, subjectname, chaptername, description, classname;
+    private String videoId, videoUrl, videoName, subjectname, chaptername, description, classname,pathmp4;
     private long videoDurationInSeconds;
     private Runnable runnableCode;
     private Handler handler;
@@ -280,6 +276,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         classname = intent.getStringExtra("class");
         description = intent.getStringExtra("desc");
         chapter_id = intent.getStringExtra("chapter_id");
+        pathmp4=intent.getStringExtra("path");
 
         TextView textView_title, textView_class, textView_desc;
         requestQueue = RequestQueueSingleton.getInstance(this)
@@ -294,6 +291,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         textView_title.setText(videoName);
         textView_class.setText(subjectname + " | " + chaptername);
         textView_desc.setText(description);
+
 
         if (savedInstanceState != null) {
             trackSelectorParameters = savedInstanceState.getParcelable(KEY_TRACK_SELECTOR_PARAMETERS);
@@ -378,24 +376,31 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         rvtvid = findViewById(R.id.rvtvid);
 
 
-
         downloadimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                    download(videoUrl,videoName);
 
 
                 ExoDownloadState exoDownloadState = (ExoDownloadState) downloadimage.getTag();
 
                 exoVideoDownloadDecision(exoDownloadState.DOWNLOAD_START);
 
+//                startdownloading();
+
 
             }
         });
+        for (Map.Entry<Uri, Download> entry : AdaptiveExoplayer.getInstance().getDownloadTracker().downloads.entrySet())
+        {
+            Uri keyUri = entry.getKey();
+            download = entry.getValue();
 
+        }
         setProgress();
 
     }
+
+
 
     private void exoVideoDownloadDecision(ExoDownloadState exoDownloadState) {
         if (exoDownloadState == null || videoUrl.isEmpty()) {
@@ -496,7 +501,6 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         });
 
     }
-
     private void showDownloadOptionsDialog(DownloadHelper helper, List<TrackKey> trackKeyss) {
 
         if (helper == null) {
@@ -511,9 +515,9 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         for (int i = 0; i < trackKeyss.size(); i++) {
             TrackKey trackKey = trackKeyss.get(i);
             long bitrate = trackKey.getTrackFormat().bitrate;
-            long getInBytes = (bitrate * videoDurationInSeconds) / 8;
+            long getInBytes =  (bitrate * videoDurationInSeconds)/8;
             String getInMb = AppUtil.formatFileSize(getInBytes);
-            String videoResoultionDashSize = " " + trackKey.getTrackFormat().height + "      (" + getInMb + ")";
+            String videoResoultionDashSize =  " "+trackKey.getTrackFormat().height +"      ("+getInMb+")";
             optionsToDownload.add(i, videoResoultionDashSize);
         }
 
@@ -541,6 +545,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
                         .build();
 
 
+
             }
         });
         // Set the a;ert dialog positive button
@@ -562,6 +567,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
                 }
 
 
+
                 DownloadRequest downloadRequest = helper.getDownloadRequest(Util.getUtf8Bytes(videoUrl));
                 if (downloadRequest.streamKeys.isEmpty()) {
                     // All tracks were deselected in the dialog. Don't start the download.
@@ -580,6 +586,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         dialog.setCancelable(true);
         dialog.show();
     }
+
 
     private void startDownload(DownloadRequest downloadRequestt) {
 
@@ -635,11 +642,12 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         Bundle bundle = getIntent().getExtras();
 
 
-        if (bundle != null) {
-//            videoId = bundle.getString("video_id");
-//            videoName = bundle.getString("video_name");
-//            videoUrl = bundle.getString("video_url");
-//            videoDurationInSeconds =bundle.getLong("video_duration");
+        if (bundle != null)
+        {
+            videoId = bundle.getString("video_id");
+            videoName = bundle.getString("video_name");
+            videoUrl = bundle.getString("video_url");
+            videoDurationInSeconds =bundle.getLong("video_duration");
         }
 
 
@@ -877,51 +885,34 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         playerView.setPlayer(player);
         playerView.setPlaybackPreparer(this);
         mediaSource = buildMediaSource(Uri.parse(videoUrl));
-        if (player != null)
-        {
+        if (player != null) {
             player.prepare(mediaSource, false, true);
         }
 
-
-        for (Map.Entry<Uri, Download> entry : AdaptiveExoplayer.getInstance().getDownloadTracker().downloads.entrySet())
-        {
-             keyUri = entry.getKey();
-             download = entry.getValue();
-            Toast.makeText(this, "keyuri"+keyUri+":"+"videoUrl"+videoUrl, Toast.LENGTH_SHORT).show();
-
-            if(download.state==Download.STATE_COMPLETED)
-            {
-
-
-                Toast.makeText(this, download.request.id, Toast.LENGTH_SHORT).show();
-                downloadimage.setImageDrawable(getResources().getDrawable(R.drawable.ic_downloded));
+//
+//        for (Map.Entry<Uri, Download> entry : AdaptiveExoplayer.getInstance().getDownloadTracker().downloads.entrySet()) {
+//            keyUri = entry.getKey();
+//            download = entry.getValue();
+//            Toast.makeText(this, "keyuri" + keyUri + ":" + "videoUrl" + videoUrl, Toast.LENGTH_SHORT).show();
+//
+//
+//
+//        }
 
                 ImageView viewvideo;
-                viewvideo=findViewById(R.id.viewvideo);
+                viewvideo = findViewById(R.id.viewvideo);
 
-                viewvideo.setOnClickListener(new View.OnClickListener() {
+                viewvideo.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
                     public void onClick(View v) {
-                        Intent intent=new Intent(OnlinePlayerActivity.this,OfflinePlayerActivity.class);
-                        intent.putExtra("video_title",videoName);
-                        intent.putExtra("video_url",download.request.id);
+                        Intent intent = new Intent(OnlinePlayerActivity.this, DownloadActivity.class);
                         startActivity(intent);
+
+
+
                     }
                 });
-            }
-
-            else
-            {
-
-                downloadimage.setImageDrawable(getResources().getDrawable(R.drawable.download));
-            }
-
-        }
-
-
-
-
-        loadVideos();
 
 
         updateButtonVisibilities();
@@ -1324,7 +1315,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
 
 
     public void getdata() {
-        ArrayList<com.mastervidya.mastervidya.model.VideoModel> videoModelArrayList = new ArrayList<>();
+        ArrayList<VideoModel1> videoModelArrayList = new ArrayList<>();
 
         JSONObject json = new JSONObject();
         try {
@@ -1347,7 +1338,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
                     if (status.contains("success")) {
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 0; i < jsonArray.length(); i++) {
-                            com.mastervidya.mastervidya.model.VideoModel videoModel = new VideoModel();
+                            VideoModel1 videoModel = new VideoModel1();
 
                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                             String video_id = jsonObject1.getString("video_id");
@@ -1398,7 +1389,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
                         recyclerView.setHasFixedSize(true);
                         recyclerView.setLayoutManager(new LinearLayoutManager(OnlinePlayerActivity.this, RecyclerView.VERTICAL, false));
                         recyclerView.setAdapter(adapter);
-                        rvtvid.setVisibility(View.VISIBLE);
+                        rvtvid.setVisibility(View.GONE);
                     } else {
                         rvtvid.setVisibility(View.GONE);
                     }
@@ -1441,97 +1432,10 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-    public void download(String videoUrl, String filename) {
-
-
-        String rootDir = Environment.getExternalStorageDirectory()
-                + File.separator + "Video_Mastervidya";
-
-        AndroidNetworking.download("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", rootDir, filename)
-                .setTag("downloadTest")
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .setDownloadProgressListener(new DownloadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesDownloaded, long totalBytes) {
-
-                    }
-                })
-                .startDownload(new DownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
-
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
-
-    }
-
-
-    public void download1(String videoUrl, String videoname) {
-        class ProgressBack extends AsyncTask<String, String, String> {
-            ProgressDialog PD;
-
-            @Override
-            protected void onPreExecute() {
-                ProgressDialog PD;
-                PD = ProgressDialog.show(OnlinePlayerActivity.this, null, "Please Wait ...", true);
-                PD.setCancelable(true);
-            }
-
-            @Override
-            protected String doInBackground(String... arg0) {
-                downloadFile("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", videoname);
-
-                return null;
-            }
-
-            protected void onPostExecute(Boolean result) {
-                PD.dismiss();
-
-            }
-
-            private void downloadFile(String fileURL, String fileName) {
-                try {
-                    String rootDir = Environment.getExternalStorageDirectory()
-                            + File.separator + "Video";
-                    File rootFile = new File(rootDir);
-                    rootFile.mkdir();
-                    URL url = new URL(fileURL);
-                    HttpURLConnection c = (HttpURLConnection) url.openConnection();
-                    c.setRequestMethod("GET");
-                    c.setDoOutput(true);
-                    c.connect();
-                    FileOutputStream f = new FileOutputStream(new File(rootFile,
-                            fileName));
-                    InputStream in = c.getInputStream();
-                    byte[] buffer = new byte[1024];
-                    int len1 = 0;
-                    while ((len1 = in.read(buffer)) > 0) {
-                        f.write(buffer, 0, len1);
-                    }
-                    f.close();
-                } catch (IOException e) {
-                    Log.d("Error....", e.toString());
-                }
-            }
-
-        }
-
-
-    }
-
-    private void loadVideos() {
 
 
 
-        }
 
 
-
-    }
+}
 

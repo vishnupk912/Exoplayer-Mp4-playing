@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/bgimage2"
-    tools:context=".ui.QuizaAcitivity">
+    android:orientation="vertical"
+    tools:context=".ui.ViewAnswer">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,12 +21,9 @@
             android:layout_marginLeft="@dimen/ts12"
             />
         <TextView
-            android:id="@+id/subnametv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Science"
-            android:singleLine="true"
-            android:ellipsize="end"
+            android:text="View Answer"
             android:textColor="@color/colorprimarydark"
             android:fontFamily="@font/poppinssemibold"
             android:textSize="@dimen/sp16"
@@ -37,30 +34,18 @@
 
     </LinearLayout>
 
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/countdownText"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal"
-        android:textSize="@dimen/sp16"
-        android:text="timer"
-        android:layout_marginTop="@dimen/ts20"
-        android:fontFamily="@font/poppinssemibold"
-        android:textColor="@color/colorprimarydark"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/ts48"
+        android:orientation="vertical"
         >
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
             />
+
     </LinearLayout>
+
 </LinearLayout>

@@ -14,7 +14,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,13 +22,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
-import com.mastervidya.mastervidya.adapter.ChapterAdapter;
 import com.mastervidya.mastervidya.adapter.VideoAdapter;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
-import com.mastervidya.mastervidya.model.ChapterModel;
-import com.mastervidya.mastervidya.model.VideoModel;
+import com.mastervidya.mastervidya.model.VideoModel1;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,7 +89,7 @@ public class VideoListing extends AppCompatActivity {
         linearLayout_Quiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1=new Intent(VideoListing.this,QuizaAcitivity.class);
+                Intent intent1=new Intent(VideoListing.this,Quizinfo.class);
                 startActivity(intent1);
             }
         });
@@ -103,7 +100,7 @@ public class VideoListing extends AppCompatActivity {
 
     public void getdata()
     {
-        ArrayList<VideoModel> videoModelArrayList=new ArrayList<>();
+        ArrayList<VideoModel1> videoModelArrayList=new ArrayList<>();
         dialog_progress.show();
         JSONObject json = new JSONObject();
         try
@@ -131,7 +128,7 @@ public class VideoListing extends AppCompatActivity {
                         JSONArray jsonArray=jsonObject.getJSONArray("data");
                         for(int i=0;i<jsonArray.length();i++)
                         {
-                            VideoModel videoModel=new VideoModel();
+                            VideoModel1 videoModel=new VideoModel1();
 
                             JSONObject jsonObject1=jsonArray.getJSONObject(i);
                             String video_id=jsonObject1.getString("video_id");
@@ -142,6 +139,7 @@ public class VideoListing extends AppCompatActivity {
                             String subject=jsonObject1.getString("subject");
                             String classs=jsonObject1.getString("class");
                             String chapter_id=jsonObject1.getString("chapter_id");
+                            String path=jsonObject1.getString("path");
 
                             videoModel.setChapter(chapter);
                             videoModel.setClasss(classs);
@@ -151,6 +149,7 @@ public class VideoListing extends AppCompatActivity {
                             videoModel.setUrl(url);
                             videoModel.setVideoid(video_id);
                             videoModel.setChapter_id(chapter_id);
+                            videoModel.setPath(path);
                             videoModelArrayList.add(videoModel);
 
 
@@ -235,6 +234,5 @@ public class VideoListing extends AppCompatActivity {
         }
 
     }
-
 
 }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:background="@drawable/etshape"
     android:layout_marginLeft="@dimen/ts20"
+    android:id="@+id/linearlay"
     android:layout_marginRight="@dimen/ts12"
     android:layout_marginTop="@dimen/ts12"
     android:gravity="center_vertical"
@@ -13,7 +14,8 @@
         android:id="@+id/tvans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Answer"
+        android:text=""
+        android:textColor="@color/grey11"
         android:fontFamily="@font/poppinsregular"
         android:layout_marginStart="@dimen/ts12"
         />

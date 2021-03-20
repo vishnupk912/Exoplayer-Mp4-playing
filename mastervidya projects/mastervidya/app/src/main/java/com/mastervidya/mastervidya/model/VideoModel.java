@@ -1,72 +1,52 @@
 package com.mastervidya.mastervidya.model;
 
-public class VideoModel
-{
-    String videoid,title,url,descirption;
-    String chapter,subject,classs;
-    String chapter_id;
+/**
+ * Created by Mayur Solanki (mayursolanki120@gmail.com) on 22/06/20, 12:05 AM.
+ */
+public class VideoModel {
 
-    public String getChapter_id() {
-        return chapter_id;
+    private String videoId;
+    private String videoName;
+    private String videoUrl;
+    private long videoDuration;
+
+
+    public VideoModel(String videoId, String videoName, String videoUrl, long videoDuration) {
+        this.videoId = videoId;
+        this.videoName = videoName;
+        this.videoUrl = videoUrl;
+        this.videoDuration = videoDuration;
     }
 
-    public void setChapter_id(String chapter_id) {
-        this.chapter_id = chapter_id;
+    public String getVideoId() {
+        return videoId;
     }
 
-    public String getSubject() {
-        return subject;
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public String getVideoName() {
+        return videoName;
     }
 
-    public String getClasss() {
-        return classs;
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
     }
 
-    public void setClasss(String classs) {
-        this.classs = classs;
+    public String getVideoUrl() {
+        return videoUrl;
     }
 
-    public String getChapter() {
-        return chapter;
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
-    public void setChapter(String chapter) {
-        this.chapter = chapter;
+    public long getVideoDuration() {
+        return videoDuration;
     }
 
-    public String getVideoid() {
-        return videoid;
-    }
-
-    public void setVideoid(String videoid) {
-        this.videoid = videoid;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getDescirption() {
-        return descirption;
-    }
-
-    public void setDescirption(String descirption) {
-        this.descirption = descirption;
+    public void setVideoDuration(long videoDuration) {
+        this.videoDuration = videoDuration;
     }
 }

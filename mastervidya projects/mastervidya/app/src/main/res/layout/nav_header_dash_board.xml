@@ -208,6 +208,37 @@
                 android:layout_height="1dp"
                 android:background="@color/lgrey"
                 />
+            <LinearLayout
+                android:id="@+id/mydownload"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cat1"
+                android:gravity="center_vertical"
+                >
+                <ImageView
+                    android:layout_width="@dimen/ts32"
+                    android:layout_height="@dimen/ts32"
+                    android:src="@drawable/ic_savedvideos"
+                    android:layout_marginLeft="@dimen/ts24"
+                    />
+
+                <TextView
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp16"
+                    android:padding="@dimen/ts4"
+                    android:layout_marginLeft="@dimen/ts16"
+                    android:fontFamily="@font/poppinslight"
+                    android:text="My Downloads"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lgrey"
+                />
+
 
             <LinearLayout
                 android:layout_width="match_parent"

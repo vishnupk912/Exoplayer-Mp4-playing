@@ -35,6 +35,16 @@ public class Url
 
     public  static  final String quiz=base_url1+"quiz";
 
+    public  static  final String quiz_info=base_url1+"quiz_info";
+
+
+
+    public  static  final String quiz_submit=base_url1+"quiz_submit";
+
+
+    public  static  final String show_answers=base_url1+"show_answers";
+
+
 
 
 

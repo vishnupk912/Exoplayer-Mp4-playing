@@ -22,12 +22,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
-import com.mastervidya.mastervidya.adapter.VideoAdapter;
 import com.mastervidya.mastervidya.adapter.VideoAdapter1;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
-import com.mastervidya.mastervidya.model.VideoModel;
+import com.mastervidya.mastervidya.model.VideoModel1;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,7 +91,7 @@ public class SpecialVideoListing extends AppCompatActivity {
 
     public void getdata()
     {
-        ArrayList<VideoModel> videoModelArrayList=new ArrayList<>();
+        ArrayList<VideoModel1> videoModelArrayList=new ArrayList<>();
         dialog_progress.show();
         JSONObject json = new JSONObject();
         try
@@ -120,7 +119,7 @@ public class SpecialVideoListing extends AppCompatActivity {
                         JSONArray jsonArray=jsonObject.getJSONArray("data");
                         for(int i=0;i<jsonArray.length();i++)
                         {
-                            VideoModel videoModel=new VideoModel();
+                            VideoModel1 videoModel=new VideoModel1();
 
                             JSONObject jsonObject1=jsonArray.getJSONObject(i);
                             String video_id=jsonObject1.getString("video_id");

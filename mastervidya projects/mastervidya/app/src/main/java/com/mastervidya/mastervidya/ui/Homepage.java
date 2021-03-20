@@ -47,6 +47,7 @@ import com.mastervidya.mastervidya.helper.Url;
 import com.mastervidya.mastervidya.model.Demovideomodel;
 import com.mastervidya.mastervidya.model.Homepagermodel;
 import com.mastervidya.mastervidya.model.PagerModel;
+import com.mastervidya.mastervidya.video.DownloadActivity;
 import com.mastervidya.mastervidya.video.OnlinePlayerActivity;
 import com.razorpay.PaymentResultListener;
 import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator;
@@ -64,6 +65,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Homepage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+
     NavigationView nav_view;
     DrawerLayout drawer_layout;
     RequestQueue requestQueue;
@@ -162,13 +165,24 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         View header = nav_view.getHeaderView(0);
 
         TextView tvNav1;
-        LinearLayout chatlay,signoutlay,myprofile;
+        LinearLayout chatlay,signoutlay,myprofile,mydownload;
         ImageView imgNav;
         chatlay=header.findViewById(R.id.chatlay);
         signoutlay=header.findViewById(R.id.signoutlay);
         imgNav=header.findViewById(R.id.imgNav);
         myprofile=header.findViewById(R.id.myprofile);
         tvNav1=header.findViewById(R.id.tvNav1);
+        mydownload=header.findViewById(R.id.mydownload);
+
+
+        mydownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDrawer();
+                Intent intent=new Intent(Homepage.this, DownloadActivity.class);
+                startActivity(intent);
+            }
+        });
         myprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,7 +241,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         lay3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(Homepage.this, OnlinePlayerActivity.class);
+                Intent intent=new Intent(Homepage.this, QuizResult.class);
                 startActivity(intent);
             }
         });

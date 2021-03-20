@@ -1,8 +1,22 @@
 package com.mastervidya.mastervidya.video;
 
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.view.View;
+import android.view.Window;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.database.DatabaseProvider;
@@ -25,10 +39,23 @@ import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
+import com.google.gson.Gson;
+import com.mastervidya.mastervidya.R;
+import com.mastervidya.mastervidya.adapter.ChapterAdapter;
+import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
+import com.mastervidya.mastervidya.helper.SessionHandler;
+import com.mastervidya.mastervidya.helper.Url;
+import com.mastervidya.mastervidya.model.ChapterModel;
+import com.mastervidya.mastervidya.ui.Chapters;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -51,16 +78,14 @@ public class AdaptiveExoplayer extends Application {
     private static AdaptiveExoplayer mInstance;
     public List<VideoModel> videoModels = new ArrayList<>();
 
+    RequestQueue requestQueue;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
 
 
-
-        videoModels.add(new VideoModel("1","Resignation","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",15));
-        videoModels.add(new VideoModel("2","big buck bunny","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",128));
-        videoModels.add(new VideoModel("3","example","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",30));
 
 
         mInstance = this;
@@ -205,6 +230,16 @@ public class AdaptiveExoplayer extends Application {
                 CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR,
                 /* eventListener= */ null);
     }
+
+    public void getlocaldata()
+    {
+
+        videoModels.add(new VideoModel("1","Resignation","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",15));
+        videoModels.add(new VideoModel("2","big buck bunny","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",128));
+        videoModels.add(new VideoModel("3","example","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",30));
+
+    }
+
 
 
 }

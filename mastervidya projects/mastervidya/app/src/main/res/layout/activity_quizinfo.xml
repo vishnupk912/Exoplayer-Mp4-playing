@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorprimarydark"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".ui.Quizinfo">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="@dimen/cat"
+            android:layout_height="@dimen/cat"
+            android:src="@drawable/logo1"
+            android:layout_marginLeft="@dimen/ts20"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MasterVidya \nSuper Quiz"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppinsextrabold"
+            android:textSize="@dimen/ts32"
+            android:layout_marginLeft="@dimen/ts20"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play the Super Quiz and improve your knowledge"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/ts20"
+            android:layout_marginBottom="@dimen/ts12"
+            android:textSize="@dimen/sp12"
+            android:fontFamily="@font/poppinsregular"
+
+
+            />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today's Quiz On "
+            android:layout_marginTop="@dimen/ts12"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/ts20"
+            android:textSize="@dimen/sp12"
+            android:fontFamily="@font/poppinsregular"
+            />
+
+        <TextView
+            android:id="@+id/chapternametv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorprimarydark"
+            android:fontFamily="@font/poppinssemibold"
+            android:textSize="@dimen/sp16"
+            android:layout_marginLeft="@dimen/ts20"
+            android:layout_marginTop="@dimen/ts4"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description : "
+            android:layout_marginTop="@dimen/ts12"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/ts20"
+            android:textSize="@dimen/sp12"
+            android:fontFamily="@font/poppinsregular"
+            />
+
+        <TextView
+            android:id="@+id/descriptiontv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play the Super Quiz and improve your knowledge"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/ts20"
+            android:layout_marginBottom="@dimen/ts12"
+            android:textSize="@dimen/sp12"
+            android:fontFamily="@font/poppinsregular"
+
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/ts20"
+            android:layout_marginRight="@dimen/ts20"
+            android:layout_marginTop="@dimen/ts8"
+            android:gravity="center"
+            >
+            <LinearLayout
+                android:layout_width="@dimen/cat1"
+                android:layout_height="@dimen/cat1"
+                android:background="@drawable/buttonshape2light222"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/timetv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorprimarydark"
+                    android:fontFamily="@font/poppinssemibold"
+                    android:textSize="@dimen/sp12"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Minutes"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorprimarydark"
+                    android:fontFamily="@font/poppinssemibold"
+                    android:textSize="@dimen/sp12"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/cat1"
+                android:layout_height="@dimen/cat1"
+                android:layout_marginLeft="@dimen/ts12"
+                android:background="@drawable/buttonshape2light222"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/questiontv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorprimarydark"
+                    android:fontFamily="@font/poppinssemibold"
+                    android:textSize="@dimen/sp12"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Questions"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorprimarydark"
+                    android:fontFamily="@font/poppinssemibold"
+                    android:textSize="@dimen/sp12"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/cat1"
+                android:layout_height="@dimen/cat1"
+                android:layout_marginLeft="@dimen/ts12"
+                android:background="@drawable/buttonshape2light222"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/passstv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorprimarydark"
+                    android:fontFamily="@font/poppinssemibold"
+                    android:textSize="@dimen/sp12"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pass Mark"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorprimarydark"
+                    android:fontFamily="@font/poppinssemibold"
+                    android:textSize="@dimen/sp12"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:layout_marginBottom="@dimen/ts12"
+            android:layout_marginLeft="@dimen/ts20"
+            android:layout_marginRight="@dimen/ts20"
+            >
+            <LinearLayout
+                android:id="@+id/startlay"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ts48"
+                android:background="@drawable/buttonshape1"
+                android:layout_marginTop="@dimen/ts16"
+                android:gravity="center"
+
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="START QUIZ"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp16"
+                    android:fontFamily="@font/poppinsregular"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
