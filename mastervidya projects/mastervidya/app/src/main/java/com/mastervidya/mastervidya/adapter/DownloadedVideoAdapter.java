@@ -34,12 +34,14 @@ import java.util.List;
 public class DownloadedVideoAdapter extends RecyclerView.Adapter<DownloadedVideoAdapter.MyViewHolder> { //implements Filterable
 
     List<Download> videosList;
+    List<VideoModel> videoModelList=new ArrayList<>();
     //    private ValueFilter mFilter = new ValueFilter();
     Context context;
     DownloadActivity downloadActivity;
 
     SessionHandler sessionHandler;
 
+    VideoModel videoModel;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         LinearLayout rlContainer;
@@ -49,6 +51,7 @@ public class DownloadedVideoAdapter extends RecyclerView.Adapter<DownloadedVideo
         TextView tvDownloadVideoStatus;
         ImageView imgMenuOverFlow;
         ProgressBar progressBarPercentage;
+        TextView chapternametvtv;
 
 
 
@@ -61,7 +64,7 @@ public class DownloadedVideoAdapter extends RecyclerView.Adapter<DownloadedVideo
             tvDownloadVideoStatus = view.findViewById(R.id.tv_downloaded_status);
             imgMenuOverFlow = view.findViewById(R.id.img_overflow);
             progressBarPercentage = view.findViewById(R.id.progress_horizontal_percentage);
-
+            chapternametvtv=view.findViewById(R.id.chapternametvtv);
 //            imgDownloadDelete = view.findViewById(R.id.img_delete_download);
 //            imgDownloadPlayPause = view.findViewById(R.id.img_download_play_pause);
 
@@ -101,10 +104,12 @@ public class DownloadedVideoAdapter extends RecyclerView.Adapter<DownloadedVideo
                     Download download = (Download) payloads.get(position);
 
                     VideoModel videoModel = AppUtil.getVideoDetail(download.request.id);
+                    videoModelList.add(videoModel);
 
-                    if (!videoModel.getVideoName().isEmpty()) {
+                    if (!videoModelList.get(position).getVideoName().isEmpty()) {
                         holder.tvDownloadVideoTitle.setText(videoModel.getVideoName());
                     }
+                    holder.chapternametvtv.setText(videoModelList.get(position).getClassname()+"|"+videoModelList.get(position).getChaptername()+" | "+ videoModelList.get(position).getSubjectname());
 
                     Toast.makeText(context, "Log : "+videoModel.getVideoName(), Toast.LENGTH_SHORT).show();
 
@@ -142,12 +147,13 @@ public class DownloadedVideoAdapter extends RecyclerView.Adapter<DownloadedVideo
         Download download = videosList.get(position);
 
 
-        VideoModel videoModel =   AppUtil.getVideoDetail(download.request.id);
+         videoModel =   AppUtil.getVideoDetail(download.request.id);
+        videoModelList.add(videoModel);
 
-        if (!videoModel.getVideoName().isEmpty())
-        {
+        if (!videoModelList.get(position).getVideoName().isEmpty()) {
             holder.tvDownloadVideoTitle.setText(videoModel.getVideoName());
         }
+        holder.chapternametvtv.setText(videoModelList.get(position).getClassname()+"|"+videoModelList.get(position).getChaptername()+" | "+ videoModelList.get(position).getSubjectname());
 
 ////
         if (download.state == Download.STATE_COMPLETED) {
@@ -210,21 +216,21 @@ public class DownloadedVideoAdapter extends RecyclerView.Adapter<DownloadedVideo
     }
 
 
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        return position;
+//    }
+//
+//
+//    public Download getItem(int position) {
+//        return videosList.get(position);
+//    }
 
-
-    public Download getItem(int position) {
-        return videosList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
+//    @Override
+//    public long getItemId(int position) {
+//        return position;
+//    }
+//
 
     public void addItems(List<Download> lst) {
         this.videosList = lst;
@@ -238,6 +244,13 @@ public class DownloadedVideoAdapter extends RecyclerView.Adapter<DownloadedVideo
         this.videosList.addAll(newData);
     }
 
+    public void filterlist(ArrayList<VideoModel> filterlist)
+    {
+        videoModelList=filterlist;
+
+        notifyDataSetChanged();
+        Toast.makeText(context, videoModelList.toString(), Toast.LENGTH_SHORT).show();
+    }
 
 
 }

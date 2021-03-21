@@ -95,7 +95,6 @@ public class SpecialStudy extends AppCompatActivity {
     private void subjects()
     {
         ArrayList<SubModel> subModelArrayList=new ArrayList<>();
-
         JSONObject json = new JSONObject();
         try
         {
@@ -114,7 +113,9 @@ public class SpecialStudy extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject jsonObject)
                     {
-                        dialog_progress.dismiss();
+
+
+                                dialog_progress.dismiss();
                         try {
                             String status=jsonObject.getString("status");
                             if(status.contains("success"))

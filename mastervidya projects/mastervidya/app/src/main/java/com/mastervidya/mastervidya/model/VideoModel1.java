@@ -4,7 +4,15 @@ public class VideoModel1
 {
     String videoid,title,url,descirption;
     String chapter,subject,classs;
-    String chapter_id,path;
+    String chapter_id,path,image_file;
+
+    public String getImage_file() {
+        return image_file;
+    }
+
+    public void setImage_file(String image_file) {
+        this.image_file = image_file;
+    }
 
     public String getPath() {
         return path;

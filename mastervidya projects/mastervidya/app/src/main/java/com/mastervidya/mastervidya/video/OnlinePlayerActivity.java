@@ -97,6 +97,7 @@ import com.mastervidya.mastervidya.adapter.VideoAdapter;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
+import com.mastervidya.mastervidya.localdatabase.Dbconnector;
 import com.mastervidya.mastervidya.model.VideoModel1;
 
 import org.json.JSONArray;
@@ -126,6 +127,8 @@ import javax.crypto.SecretKey;
 
 public class OnlinePlayerActivity extends AppCompatActivity implements View.OnClickListener, PlaybackPreparer, PlayerControlView.VisibilityListener, DownloadTracker.Listener {
 
+
+    Dbconnector dbconnector;
     public  List<VideoModel> videoModels = new ArrayList<>();
     private List<Download> downloadedVideoList;
     private DownloadedVideoAdapter downloadedVideoAdapter;
@@ -230,7 +233,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
     SessionHandler sessionHandler;
     ImageView downloadimage;
     String chapter_id;
-    private String videoId, videoUrl, videoName, subjectname, chaptername, description, classname,pathmp4;
+    private String videoId, videoUrl, videoName, subjectname, chaptername, description, classname;
     private long videoDurationInSeconds;
     private Runnable runnableCode;
     private Handler handler;
@@ -276,7 +279,9 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         classname = intent.getStringExtra("class");
         description = intent.getStringExtra("desc");
         chapter_id = intent.getStringExtra("chapter_id");
-        pathmp4=intent.getStringExtra("path");
+
+
+        Log.d("videourl",videoUrl);
 
         TextView textView_title, textView_class, textView_desc;
         requestQueue = RequestQueueSingleton.getInstance(this)
@@ -287,6 +292,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         textView_title = findViewById(R.id.titletv);
         textView_class = findViewById(R.id.tv2);
         textView_desc = findViewById(R.id.decsptv);
+        dbconnector=new Dbconnector(this);
 
         textView_title.setText(videoName);
         textView_class.setText(subjectname + " | " + chaptername);
@@ -381,9 +387,31 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
             public void onClick(View v) {
 
 
-                ExoDownloadState exoDownloadState = (ExoDownloadState) downloadimage.getTag();
+//
+//                if(dbconnector.Exists(videoId))
+//                {
+//                    Toast.makeText(OnlinePlayerActivity.this, "This video has already downloaded", Toast.LENGTH_SHORT).show();
+//                }
+//                else
+//                {
+                    ExoDownloadState exoDownloadState = (ExoDownloadState) downloadimage.getTag();
 
-                exoVideoDownloadDecision(exoDownloadState.DOWNLOAD_START);
+                    exoVideoDownloadDecision(exoDownloadState.DOWNLOAD_START);
+
+                    VideoModel videoModel=new VideoModel();
+                    videoModel.setVideoId(videoId);
+                    videoModel.setVideoUrl(videoUrl);
+                    videoModel.setClassname(classname);
+                    videoModel.setSubjectname(subjectname);
+                    videoModel.setChaptername(chaptername);
+                    videoModel.setVideoName(videoName);
+
+
+                    dbconnector.addvideo(videoModel);
+//
+//                }
+
+
 
 //                startdownloading();
 

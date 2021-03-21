@@ -129,7 +129,7 @@ public class SpecialVideoListing extends AppCompatActivity {
                             String chapter=jsonObject1.getString("chapter");
                             String subject=jsonObject1.getString("subject");
                             String classs=jsonObject1.getString("class");
-//                            String chapter_id=jsonObject1.getString("chapter_id");
+                            String image_file=jsonObject1.getString("image_file");
 
                             videoModel.setChapter(chapter);
                             videoModel.setClasss(classs);
@@ -138,6 +138,7 @@ public class SpecialVideoListing extends AppCompatActivity {
                             videoModel.setDescirption(description);
                             videoModel.setUrl(url);
                             videoModel.setVideoid(video_id);
+                            videoModel.setImage_file(image_file);
 //                            videoModel.setChapter_id(chapter_id);
                             videoModelArrayList.add(videoModel);
 

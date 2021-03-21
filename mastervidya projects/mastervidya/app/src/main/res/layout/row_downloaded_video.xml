@@ -91,7 +91,7 @@
                     android:fontFamily="@font/poppinsregular"
                     />
                 <TextView
-                    android:id="@+id/yeartv"
+                    android:id="@+id/chapternametvtv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

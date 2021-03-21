@@ -37,63 +37,77 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvid"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:overScrollMode="never"
-        />
-
-
-    <LinearLayout
-
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:background="@drawable/buttonshape2light"
-        android:elevation="@dimen/ts12"
-        android:gravity="center_vertical"
-        android:id="@+id/layquiz"
-        android:layout_margin="@dimen/ts8"
-
-        android:layout_height="@dimen/cat1">
-
-        <LinearLayout
-            android:layout_width="@dimen/ts40"
-            android:layout_height="@dimen/ts40"
-            android:background="@drawable/ic_quiz"
-            android:gravity="center"
-            android:layout_marginLeft="@dimen/ts12"
-            >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/nametv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/ts16"
-                android:fontFamily="@font/poppinsregular"
-                android:text="Quiz"
-                android:textColor="@color/colorprimarydark"
-                android:textSize="@dimen/sp16" />
-
-
-        </LinearLayout>
-
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="right|center_vertical"
-            android:layout_marginRight="@dimen/ts12"
-
-
+            android:orientation="vertical"
             >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                />
+
+
+            <LinearLayout
+
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:background="@drawable/buttonshape2light"
+                android:elevation="@dimen/ts12"
+                android:gravity="center_vertical"
+                android:id="@+id/layquiz"
+                android:layout_margin="@dimen/ts8"
+
+                android:layout_height="@dimen/cat1">
+
+                <LinearLayout
+                    android:layout_width="@dimen/ts40"
+                    android:layout_height="@dimen/ts40"
+                    android:background="@drawable/ic_quiz"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/ts12"
+                    >
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/nametv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/ts16"
+                        android:fontFamily="@font/poppinsregular"
+                        android:text="Quiz"
+                        android:textColor="@color/colorprimarydark"
+                        android:textSize="@dimen/sp16" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/ts12"
+
+
+                    >
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>

@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.model.VideoModel1;
 import com.mastervidya.mastervidya.video.OnlinePlayerActivity;
@@ -22,7 +24,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>
     ArrayList<VideoModel1>  videoModelArrayList=new ArrayList<>();
     Context context;
 
-    public VideoAdapter(ArrayList<VideoModel1> videoModelArrayList, Context context) {
+    public VideoAdapter(ArrayList<VideoModel1> videoModelArrayList, Context context)
+    {
         this.videoModelArrayList = videoModelArrayList;
         this.context = context;
     }
@@ -40,9 +43,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull VideoAdapter.ViewHolder holder, int position) {
 
         String name=videoModelArrayList.get(position).getTitle();
+        String image=videoModelArrayList.get(position).getImage_file();
         holder.nametv.setText(name);
 
-
+        Glide.with(context)
+                .load(image)
+                .centerCrop()
+                .into(holder.imageView);
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +59,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>
 
 
                         Intent intent=new Intent(context, OnlinePlayerActivity.class);
-                        intent.putExtra("path",videoModelArrayList.get(position).getPath());
                         intent.putExtra("video_url",videoModelArrayList.get(position).getUrl());
                         intent.putExtra("class",videoModelArrayList.get(position).getClasss());
                         intent.putExtra("chapter",videoModelArrayList.get(position).getChapter());
@@ -79,11 +85,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder>
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         TextView nametv;
+        ImageView imageView;
         LinearLayout linearLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nametv=itemView.findViewById(R.id.nametv);
             linearLayout=itemView.findViewById(R.id.lay);
+            imageView=itemView.findViewById(R.id.imageView);
         }
     }
 }

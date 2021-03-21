@@ -139,8 +139,7 @@ public class VideoListing extends AppCompatActivity {
                             String subject=jsonObject1.getString("subject");
                             String classs=jsonObject1.getString("class");
                             String chapter_id=jsonObject1.getString("chapter_id");
-                            String path=jsonObject1.getString("path");
-
+                            String image_file=jsonObject1.getString("image_file");
                             videoModel.setChapter(chapter);
                             videoModel.setClasss(classs);
                             videoModel.setSubject(subject);
@@ -148,8 +147,8 @@ public class VideoListing extends AppCompatActivity {
                             videoModel.setDescirption(description);
                             videoModel.setUrl(url);
                             videoModel.setVideoid(video_id);
+                            videoModel.setImage_file(image_file);
                             videoModel.setChapter_id(chapter_id);
-                            videoModel.setPath(path);
                             videoModelArrayList.add(videoModel);
 
 

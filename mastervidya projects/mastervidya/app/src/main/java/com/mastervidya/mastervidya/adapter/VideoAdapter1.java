@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.model.VideoModel1;
 import com.mastervidya.mastervidya.video.OnlinePlayerActivity;
@@ -42,6 +44,11 @@ public class VideoAdapter1 extends RecyclerView.Adapter<VideoAdapter1.ViewHolder
 
         String name=videoModelArrayList.get(position).getTitle();
         holder.nametv.setText(name);
+        String image=videoModelArrayList.get(position).getImage_file();
+        Glide.with(context)
+                .load(image)
+                .centerCrop()
+                .into(holder.imageView);
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,12 +75,16 @@ public class VideoAdapter1 extends RecyclerView.Adapter<VideoAdapter1.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
+        ImageView imageView;
         TextView nametv;
         LinearLayout linearLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nametv=itemView.findViewById(R.id.nametv);
             linearLayout=itemView.findViewById(R.id.lay);
+            imageView=itemView.findViewById(R.id.imageView);
+
+
         }
     }
 }

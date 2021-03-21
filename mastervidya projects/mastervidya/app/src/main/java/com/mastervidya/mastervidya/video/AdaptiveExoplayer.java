@@ -45,6 +45,7 @@ import com.mastervidya.mastervidya.adapter.ChapterAdapter;
 import com.mastervidya.mastervidya.helper.RequestQueueSingleton;
 import com.mastervidya.mastervidya.helper.SessionHandler;
 import com.mastervidya.mastervidya.helper.Url;
+import com.mastervidya.mastervidya.localdatabase.Dbconnector;
 import com.mastervidya.mastervidya.model.ChapterModel;
 import com.mastervidya.mastervidya.ui.Chapters;
 
@@ -87,6 +88,7 @@ public class AdaptiveExoplayer extends Application {
 
 
 
+        getlocaldata();
 
         mInstance = this;
         userAgent = Util.getUserAgent(this, "AdaptiveExoplayer");
@@ -233,10 +235,30 @@ public class AdaptiveExoplayer extends Application {
 
     public void getlocaldata()
     {
+        Dbconnector dbconnector;
+        dbconnector=new Dbconnector(this);
 
-        videoModels.add(new VideoModel("1","Resignation","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",15));
-        videoModels.add(new VideoModel("2","big buck bunny","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",128));
-        videoModels.add(new VideoModel("3","example","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",30));
+//        videoModels.add(new VideoModel("1","Resignation","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",15,"STANDARD 1","chapter 1","English"));
+//        videoModels.add(new VideoModel("2","Introduction","https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8",128,"STANDARD 1","chapter 1","English"));
+//        videoModels.add(new VideoModel("3","example","http://masterlibrary.s3.amazonaws.com/Video/c1b871b7543f4edc8deffdede0cf0580.m3u8",30,"STANDARD 1","chapter 1","English"));
+
+        final List<VideoModel> videoModelList = dbconnector.getallvideo();
+        for (int i = 0; i<videoModelList.size(); i++)
+        {
+
+            Toast.makeText(this, videoModelList.toString(), Toast.LENGTH_SHORT).show();
+            VideoModel videoModel=new VideoModel();
+            videoModel.setVideoId(videoModelList.get(i).getVideoId());
+            videoModel.setVideoName(videoModelList.get(i).getVideoName());
+            videoModel.setVideoUrl(videoModelList.get(i).getVideoUrl());
+            videoModel.setChaptername(videoModelList.get(i).getChaptername());
+            videoModel.setSubjectname(videoModelList.get(i).getSubjectname());
+            videoModel.setClassname(videoModelList.get(i).getClassname());
+
+            videoModels.add(videoModel);
+        }
+
+
 
     }
 

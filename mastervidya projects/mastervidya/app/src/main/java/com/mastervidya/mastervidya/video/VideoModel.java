@@ -8,13 +8,41 @@ public class VideoModel {
     private String videoUrl;
     private long videoDuration;
 
+    String classname,chaptername,subjectname;
 
-    public VideoModel(String videoId, String videoName, String videoUrl, long videoDuration) {
-        this.videoId = videoId;
-        this.videoName = videoName;
-        this.videoUrl = videoUrl;
-        this.videoDuration = videoDuration;
+    public String getClassname() {
+        return classname;
     }
+
+    public void setClassname(String classname) {
+        this.classname = classname;
+    }
+
+    public String getChaptername() {
+        return chaptername;
+    }
+
+    public void setChaptername(String chaptername) {
+        this.chaptername = chaptername;
+    }
+
+    public String getSubjectname() {
+        return subjectname;
+    }
+
+    public void setSubjectname(String subjectname) {
+        this.subjectname = subjectname;
+    }
+
+//    public VideoModel(String videoId, String videoName, String videoUrl, long videoDuration, String classname, String chaptername, String subjectname) {
+//        this.videoId = videoId;
+//        this.videoName = videoName;
+//        this.videoUrl = videoUrl;
+//        this.videoDuration = videoDuration;
+//        this.classname = classname;
+//        this.chaptername = chaptername;
+//        this.subjectname = subjectname;
+//    }
 
     public String getVideoId() {
         return videoId;

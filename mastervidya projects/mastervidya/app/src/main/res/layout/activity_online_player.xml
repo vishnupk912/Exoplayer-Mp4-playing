@@ -92,8 +92,8 @@
                     >
                     <ImageView
                         android:id="@+id/viewvideo"
-                        android:layout_width="@dimen/ts32"
-                        android:layout_height="@dimen/ts32"
+                        android:layout_width="@dimen/ts40"
+                        android:layout_height="@dimen/ts40"
                         android:src="@drawable/ic_baseline_missed_video_call_24"
                         android:padding="@dimen/ts4"
                         android:layout_marginRight="@dimen/ts20"
@@ -101,9 +101,9 @@
 
                     <ImageView
                         android:id="@+id/downloadimage"
-                        android:layout_width="@dimen/ts32"
-                        android:layout_height="@dimen/ts32"
-                        android:src="@drawable/download"
+                        android:layout_width="@dimen/ts40"
+                        android:layout_height="@dimen/ts40"
+                        android:src="@drawable/ic_downloadvdo"
                         android:padding="@dimen/ts4"
                         android:layout_marginRight="@dimen/ts20"
                         />

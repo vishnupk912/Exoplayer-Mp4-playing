@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.google.android.exoplayer2.offline.Download;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.adapter.DownloadedVideoAdapter;
+import com.mastervidya.mastervidya.localdatabase.Dbconnector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,8 @@ public class DownloadActivity extends AppCompatActivity {
     private Runnable runnableCode;
     private Handler handler;
     ImageView back;
-
+    SearchView searchView;
+    List<VideoModel> videoModelList=new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +45,42 @@ public class DownloadActivity extends AppCompatActivity {
 
 
 
+        searchView=findViewById(R.id.sv);
+        Dbconnector dbconnector;
+        dbconnector=new Dbconnector(this);
+
+//        videoModels.add(new VideoModel("1","Resignation","https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",15,"STANDARD 1","chapter 1","English"));
+//        videoModels.add(new VideoModel("2","Introduction","https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8",128,"STANDARD 1","chapter 1","English"));
+//        videoModels.add(new VideoModel("3","example","http://masterlibrary.s3.amazonaws.com/Video/c1b871b7543f4edc8deffdede0cf0580.m3u8",30,"STANDARD 1","chapter 1","English"));
+
+         videoModelList = dbconnector.getallvideo();
+        for (int i = 0; i<videoModelList.size(); i++)
+        {
+
+
+
+        }
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filter(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                return false;
+            }
+        });
+
 
         recyclerView = findViewById(R.id.recycler_view_downloaded_video);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DownloadActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+
 
         back=findViewById(R.id.back);
 
@@ -180,5 +214,30 @@ public class DownloadActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         handler.removeCallbacks(runnableCode);
+    }
+
+
+    private  void filter(String text)
+    {
+        ArrayList<VideoModel> arrayList=new ArrayList<>();
+        for(VideoModel item: videoModelList)
+        {
+            if (item.getVideoName().toLowerCase().contains(text.toLowerCase()))
+            {
+                arrayList.add(item);
+            }
+        }
+
+        if(arrayList.isEmpty())
+        {
+            Toast.makeText(this, "No Video Found", Toast.LENGTH_SHORT).show();
+
+            downloadedVideoAdapter.filterlist(arrayList);
+        }
+        else
+        {
+            downloadedVideoAdapter.filterlist(arrayList);
+
+        }
     }
 }
