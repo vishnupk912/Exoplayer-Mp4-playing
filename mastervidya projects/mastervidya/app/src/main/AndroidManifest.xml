@@ -33,7 +33,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ViewAnswer"></activity>
+        <activity android:name=".ui.ChapterWiseReport"></activity>
+        <activity android:name=".ui.ReportSubjectActivity" />
+        <activity android:name=".ui.ReportClassActivity" />
+        <activity android:name=".ui.ViewAnswer" />
         <activity android:name=".ui.QuizResult" />
         <activity android:name=".ui.Quizinfo" />
         <activity android:name=".ui.QuizaAcitivity" />
@@ -51,7 +54,9 @@
         <activity android:name=".ui.Profile" />
         <activity android:name=".ui.AddClass" />
         <activity android:name=".ui.MyClass" />
-        <activity android:name=".ui.Chat" />
+        <activity
+            android:name=".ui.Chat"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.Homepage" />
         <activity android:name=".ui.OtpPage" />
         <activity android:name=".ui.Signup" />
@@ -89,8 +94,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            tools:ignore="LockedOrientationActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
         <receiver
             android:name=".services.SMSListener"
             android:exported="true"

@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="@dimen/ts32"
             android:layout_height="@dimen/ts32"
-            android:src="@drawable/ic_arrow"
+            android:src="@drawable/ic_close"
             android:layout_marginRight="@dimen/ts13"
             />
     </LinearLayout>

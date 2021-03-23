@@ -37,12 +37,14 @@ public class DownloadActivity extends AppCompatActivity {
     private Handler handler;
     ImageView back;
     SearchView searchView;
+    Dbconnector dbconnector;
     List<VideoModel> videoModelList=new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
 
+        dbconnector=new Dbconnector(this);
 
 
         searchView=findViewById(R.id.sv);
@@ -56,8 +58,6 @@ public class DownloadActivity extends AppCompatActivity {
          videoModelList = dbconnector.getallvideo();
         for (int i = 0; i<videoModelList.size(); i++)
         {
-
-
 
         }
 
@@ -197,7 +197,6 @@ public class DownloadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AdaptiveExoplayer.getInstance().getDownloadManager().removeDownload(download.request.id);
-
 
                 dialog.dismiss();
             }

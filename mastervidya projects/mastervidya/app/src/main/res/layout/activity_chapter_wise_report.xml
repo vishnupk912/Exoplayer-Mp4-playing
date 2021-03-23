@@ -1,0 +1,80 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/report"
+    android:orientation="vertical"
+    tools:context=".ui.MyClass">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ts48"
+        android:gravity="center_vertical"
+        >
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/ts32"
+            android:layout_height="@dimen/ts32"
+            android:src="@drawable/ic_leftarrow1"
+            android:layout_marginLeft="@dimen/ts12"
+            />
+        <TextView
+            android:id="@+id/tvhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppinsregular"
+            android:textSize="@dimen/sp16"
+            android:layout_marginLeft="@dimen/ts12"
+            />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/noclasslay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+        <ImageView
+            android:layout_width="@dimen/img6"
+            android:layout_height="@dimen/img6"
+            android:src="@drawable/empty"
+            android:layout_gravity="center"
+            />
+        <TextView
+            android:layout_width="@dimen/img6"
+            android:layout_height="wrap_content"
+            android:text="No Courses are Available"
+            android:fontFamily="@font/poppinsregular"
+            android:textAlignment="center"
+            android:layout_marginTop="@dimen/ts16"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/classlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:layout_marginTop="@dimen/cat"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

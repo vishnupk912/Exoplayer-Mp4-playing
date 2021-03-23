@@ -498,6 +498,7 @@ public class QuizaAcitivity extends AppCompatActivity {
 
             json.put("key", sessionHandler.getuniquekey());
             json.put("id", id);
+            json.put("chapter_id", "1");
 
 
             JSONArray array=new JSONArray();

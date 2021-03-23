@@ -241,7 +241,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         lay3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(Homepage.this, QuizResult.class);
+                Intent intent=new Intent(Homepage.this, ReportClassActivity.class);
                 startActivity(intent);
             }
         });

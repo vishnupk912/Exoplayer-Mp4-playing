@@ -47,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** Dialog to select tracks. */
 public final class TrackSelectionDialog extends DialogFragment {
 
   private final SparseArray<TrackSelectionViewFragment> tabFragments;
@@ -210,6 +209,7 @@ public final class TrackSelectionDialog extends DialogFragment {
    * @param rendererIndex Renderer index.
    * @return The list of track selection overrides for this renderer.
    */
+
   public List<SelectionOverride> getOverrides(int rendererIndex) {
     TrackSelectionViewFragment rendererView = tabFragments.get(rendererIndex);
     return rendererView == null ? Collections.emptyList() : rendererView.overrides;
@@ -312,7 +312,6 @@ public final class TrackSelectionDialog extends DialogFragment {
     }
   }
 
-  /** Fragment to show a track selection in tab of the track selection dialog. */
   public static final class TrackSelectionViewFragment extends Fragment
       implements TrackSelectionView.TrackSelectionListener {
 

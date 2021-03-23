@@ -246,7 +246,6 @@ public class AdaptiveExoplayer extends Application {
         for (int i = 0; i<videoModelList.size(); i++)
         {
 
-            Toast.makeText(this, videoModelList.toString(), Toast.LENGTH_SHORT).show();
             VideoModel videoModel=new VideoModel();
             videoModel.setVideoId(videoModelList.get(i).getVideoId());
             videoModel.setVideoName(videoModelList.get(i).getVideoName());

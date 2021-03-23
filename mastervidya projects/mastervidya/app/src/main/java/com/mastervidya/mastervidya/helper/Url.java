@@ -44,6 +44,9 @@ public class Url
 
     public  static  final String show_answers=base_url1+"show_answers";
 
+    public  static  final String support=base_url1+"support";
+
+    public  static  final String reports=base_url1+"reports";
 
 
 

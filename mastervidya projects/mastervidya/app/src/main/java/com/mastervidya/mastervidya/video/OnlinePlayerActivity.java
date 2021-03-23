@@ -258,7 +258,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 //        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -536,7 +536,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(OnlinePlayerActivity.this);
-        builder.setTitle("Select Download Format");
+        builder.setTitle("Download Video");
         int checkedItem = 1;
 
 
@@ -545,8 +545,11 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
             long bitrate = trackKey.getTrackFormat().bitrate;
             long getInBytes =  (bitrate * videoDurationInSeconds)/8;
             String getInMb = AppUtil.formatFileSize(getInBytes);
-            String videoResoultionDashSize =  " "+trackKey.getTrackFormat().height +"      ("+getInMb+")";
+            String videoResoultionDashSize =  " "+trackKey.getTrackFormat().width +"P";
             optionsToDownload.add(i, videoResoultionDashSize);
+
+
+
         }
 
         // Initialize a new array adapter instance
