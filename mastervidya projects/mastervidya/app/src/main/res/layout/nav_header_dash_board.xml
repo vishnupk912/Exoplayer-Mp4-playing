@@ -70,6 +70,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layclass"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cat1"
                 android:gravity="center_vertical"
@@ -118,6 +119,7 @@
                 android:background="@color/lgrey"
                 />
             <LinearLayout
+                android:id="@+id/layhome"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cat1"
                 android:gravity="center_vertical"
@@ -150,6 +152,7 @@
                 android:background="@color/lgrey"
                 />
             <LinearLayout
+                android:id="@+id/layreport"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cat1"
                 android:gravity="center_vertical"
@@ -241,6 +244,7 @@
 
 
             <LinearLayout
+                android:id="@+id/laypayment"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cat1"
                 android:gravity="center_vertical"
@@ -272,6 +276,8 @@
                 />
 
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/laysupport"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cat1"
                 android:gravity="center_vertical"

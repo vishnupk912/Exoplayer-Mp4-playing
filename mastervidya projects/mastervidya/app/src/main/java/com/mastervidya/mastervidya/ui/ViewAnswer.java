@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
@@ -44,7 +46,7 @@ public class ViewAnswer extends AppCompatActivity {
     String token;
     RecyclerView recyclerView;
     SessionHandler sessionHandler;
-    String id,name,phone,avatar_image;
+    String id,name,phone,avatar_image,chap_id;
     QuestionsAdapter questionsAdapter;
     ImageView back;
 
@@ -52,6 +54,8 @@ public class ViewAnswer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_answer);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
         recyclerView=findViewById(R.id.rvid);
 
         back=findViewById(R.id.back);
@@ -72,6 +76,7 @@ public class ViewAnswer extends AppCompatActivity {
                 .getRequestQueue();
         Intent intent=getIntent();
         token=intent.getStringExtra("token");
+        chap_id=intent.getStringExtra("chap_id");
 
 
 
@@ -98,12 +103,13 @@ public class ViewAnswer extends AppCompatActivity {
 
         dialog_progress.show();
         JSONObject json = new JSONObject();
+
         try {
 
             json.put("key", sessionHandler.getuniquekey());
             json.put("id", id);
             json.put("t", token);
-            json.put("chapter_id", "1");
+            json.put("chapter_id", chap_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -195,10 +201,28 @@ public class ViewAnswer extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                dialog_progress.dismiss();
             }
         });
 
+
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError
+            {
+
+            }
+        });
         requestQueue.add(jsonObjectRequest);
     }
 

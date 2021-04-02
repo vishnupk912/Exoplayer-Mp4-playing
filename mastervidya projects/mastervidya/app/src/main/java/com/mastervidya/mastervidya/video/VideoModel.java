@@ -7,8 +7,16 @@ public class VideoModel {
     private String videoName;
     private String videoUrl;
     private long videoDuration;
-
+    private String downloadkey;
     String classname,chaptername,subjectname;
+
+    public String getDownloadkey() {
+        return downloadkey;
+    }
+
+    public void setDownloadkey(String downloadkey) {
+        this.downloadkey = downloadkey;
+    }
 
     public String getClassname() {
         return classname;

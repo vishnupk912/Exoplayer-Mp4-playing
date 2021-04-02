@@ -7,7 +7,7 @@
     android:background="@color/colorprimarydark"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".ui.Quizinfo">
+    tools:context=".ui.QuizLink">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
@@ -45,6 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 public class QuizaAcitivity extends AppCompatActivity {
 
+    String chap_id;
     Dialog dialog_progress;
     ArrayList<String> answerid_array=new ArrayList<>();
     ArrayList<String> questionid_array=new ArrayList<>();
@@ -68,6 +71,8 @@ public class QuizaAcitivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiza_acitivity);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
         viewPager2=findViewById(R.id.viewPager);
         countdownTimerText = (TextView) findViewById(R.id.countdownText);
 
@@ -84,7 +89,7 @@ public class QuizaAcitivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         duration=intent.getStringExtra("time");
-
+        chap_id=intent.getStringExtra("chap_id");
         requestQueue = RequestQueueSingleton.getInstance(this)
                 .getRequestQueue();
 
@@ -165,7 +170,7 @@ public class QuizaAcitivity extends AppCompatActivity {
         {
             json.put("key",sessionHandler.getuniquekey());
             json.put("id",id);
-            json.put("chapter_id","1");
+            json.put("chapter_id",chap_id);
 
         }
         catch (JSONException e)
@@ -199,7 +204,6 @@ public class QuizaAcitivity extends AppCompatActivity {
 
                             JSONArray jsonArray1=jsonObject1.getJSONArray("options");
 
-                            Toast.makeText(QuizaAcitivity.this, jsonArray1.toString(), Toast.LENGTH_SHORT).show();
                             for(int j=0;j<jsonArray1.length();j++)
                             {
                                 JSONObject jsonObject2=jsonArray1.getJSONObject(j);
@@ -240,7 +244,6 @@ public class QuizaAcitivity extends AppCompatActivity {
 
                     }
 
-                    Toast.makeText(QuizaAcitivity.this , arrayList_answers.toString(), Toast.LENGTH_SHORT).show();
                      questionsAdapter=new QuestionsAdapter(arrayList_question,arrayList_answers,QuizaAcitivity.this);
                     viewPager2.setAdapter(questionsAdapter);
 
@@ -254,6 +257,24 @@ public class QuizaAcitivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                dialog_progress.dismiss();
+            }
+        });
+
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError
+            {
 
             }
         });
@@ -460,7 +481,6 @@ public class QuizaAcitivity extends AppCompatActivity {
                      questionid_array.add(question_id);
 
 
-                     Toast.makeText(context, questionid_array.toString(), Toast.LENGTH_SHORT).show();
 
                      selected=position;
                      questionsAdapter.notifyDataSetChanged();
@@ -498,7 +518,7 @@ public class QuizaAcitivity extends AppCompatActivity {
 
             json.put("key", sessionHandler.getuniquekey());
             json.put("id", id);
-            json.put("chapter_id", "1");
+            json.put("chapter_id", chap_id);
 
 
             JSONArray array=new JSONArray();
@@ -539,7 +559,6 @@ public class QuizaAcitivity extends AppCompatActivity {
             public void onResponse(JSONObject jsonObject)
             {
                 dialog_progress.dismiss();
-                Toast.makeText(QuizaAcitivity.this, jsonObject.toString(), Toast.LENGTH_SHORT).show();
                 Log.d("data",jsonObject.toString());
                 try {
                     String status=jsonObject.getString("status");
@@ -564,6 +583,7 @@ public class QuizaAcitivity extends AppCompatActivity {
                             intent.putExtra("not_answered",not_answered);
                             intent.putExtra("pass_percentage",pass_percentage);
                             intent.putExtra("result",result);
+                            intent.putExtra("chap_id",chap_id);
                             startActivity(intent);
 
 
@@ -581,11 +601,31 @@ public class QuizaAcitivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                dialog_progress.dismiss();
+            }
+        });
+
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError
+            {
 
             }
         });
 
         requestQueue.add(jsonObjectRequest);
     }
+
+
 
 }

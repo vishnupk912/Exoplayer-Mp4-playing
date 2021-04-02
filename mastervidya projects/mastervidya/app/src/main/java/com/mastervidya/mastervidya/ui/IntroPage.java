@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class IntroPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro_page);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         dotsIndicator = (SpringDotsIndicator) findViewById(R.id.dots_indicator);
         viewPager=findViewById(R.id.viewPager);
@@ -37,10 +39,10 @@ public class IntroPage extends AppCompatActivity {
 
 
         PagerModel[] PagerModel = new PagerModel[] {
-                new PagerModel("Welcome to MasterVidya the learning App","We are the team who teach your Children as school does with clear concepts" ,R.drawable.ic_slider1),
-                new PagerModel("Syllabus oriented studies","Master Vidya offers you a syllabus oriented studies with VR technology" ,R.drawable.ic_slider1),
-                new PagerModel("Real time report","Worried about your childrens education Status? Master vidhya provides an real time report of your child" ,R.drawable.ic_slider1),
-                new PagerModel("Access to multiple children","We provide a single login to teach your multiple children ,so now more mulitple devices or phones for your childrens,everything in a single platform ." ,R.drawable.ic_slider1),
+                new PagerModel("Welcome to MasterVidya the learning App","We are the team who teach your Children as school does with clear concepts" ,R.drawable.image2),
+                new PagerModel("Syllabus oriented studies","Master Vidya offers you a syllabus oriented studies with VR technology" ,R.drawable.i3),
+                new PagerModel("Real time report","Worried about your childrens education Status? Master vidhya provides an real time report of your child" ,R.drawable.i2),
+                new PagerModel("Access to multiple children","We provide a single login to teach your multiple children ,so now more mulitple devices or phones for your childrens,everything in a single platform ." ,R.drawable.i4),
 
 
         };

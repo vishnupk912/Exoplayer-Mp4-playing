@@ -21,14 +21,18 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.mastervidya.mastervidya.R;
 import com.mastervidya.mastervidya.helper.AppSignatureHelper;
@@ -56,6 +60,9 @@ public class OtpPage extends AppCompatActivity {
     LinearLayout lay_main;
     SessionHandler sessionHandler;
     TextView tv1;
+    String token = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -73,6 +80,13 @@ public class OtpPage extends AppCompatActivity {
 
 
         final StringBuilder sb = new StringBuilder();
+
+        setAutoRead();
+
+        if(token.length()==0)
+        {
+            getToken();
+        }
 
 
         etOTP1.addTextChangedListener(new TextWatcher()
@@ -235,6 +249,7 @@ public class OtpPage extends AppCompatActivity {
                 }
                 else
                 {
+
                     verfymethod(phone,Integer.parseInt(otp1));
                 }
 
@@ -326,7 +341,7 @@ public class OtpPage extends AppCompatActivity {
         {
             json.put("phone",phone);
             json.put("key", Url.key);
-            json.put("push_token", "sdf");
+            json.put("push_token", token);
             json.put("otp", otp1);
 
 
@@ -414,7 +429,23 @@ public class OtpPage extends AppCompatActivity {
 
             }
         });
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
 
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError
+            {
+
+            }
+        });
         requestQueue.add(jsonObjectRequest);
     }
 
@@ -446,4 +477,20 @@ public class OtpPage extends AppCompatActivity {
         lay_main=findViewById(R.id.lay_main);
     }
 
+    private void getToken() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if(!task.isSuccessful())
+                {
+                    return;
+                }
+
+                if( task.getResult()!=null)
+                {
+                    token = task.getResult().getToken();
+                }
+            }
+        });
+    }
 }

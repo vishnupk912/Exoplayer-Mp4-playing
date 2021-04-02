@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,15 +47,17 @@ public class Profile extends AppCompatActivity {
     SessionHandler sessionHandler;
     String id,name,phone,avatar_image;
     Dialog dialog_progress,dialog_month;
-    ImageView imageView;
+    ImageView imageView,back;
 
     TextView nametv,phonetv,addresstv,boardtv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        sessionHandler=new SessionHandler(this);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
+        sessionHandler=new SessionHandler(this);
+        back=findViewById(R.id.back);
         requestQueue = RequestQueueSingleton.getInstance(this)
                 .getRequestQueue();
 
@@ -79,6 +83,12 @@ public class Profile extends AppCompatActivity {
         addresstv=findViewById(R.id.addresstv);
         boardtv=findViewById(R.id.boardtv);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         lay1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -144,6 +154,7 @@ public class Profile extends AppCompatActivity {
                                     String address=jsonObject1.getString("address");
                                     String pin=jsonObject1.getString("pin");
 
+                                    Log.d("avatar",avatar);
                                     nametv.setText(name);
                                     phonetv.setText(phone);
                                     Glide.with(Profile.this)

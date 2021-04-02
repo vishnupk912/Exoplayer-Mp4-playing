@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,11 +25,13 @@ public class QuizResult extends AppCompatActivity {
     TextView text_result;
     ImageView closeid;
     LinearLayout viewanswer;
+    String chap_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_result);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         viewanswer=findViewById(R.id.viewanswer);
         pieChart = findViewById(R.id.grid_pie);
@@ -41,7 +44,7 @@ public class QuizResult extends AppCompatActivity {
         not_answered= intent.getStringExtra("not_answered");
         pass_percentage= intent.getStringExtra("pass_percentage");
         result= intent.getStringExtra("result");
-
+        chap_id=intent.getStringExtra("chap_id");
 
 
         if(result.contains("pass"))
@@ -73,6 +76,9 @@ public class QuizResult extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1=new Intent(QuizResult.this,ViewAnswer.class);
                 intent1.putExtra("token",token);
+                intent1.putExtra("chap_id",chap_id);
+
+
                 startActivity(intent1);
             }
         });

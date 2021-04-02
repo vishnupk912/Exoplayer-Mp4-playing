@@ -11,7 +11,7 @@
     <ImageView
         android:layout_width="@dimen/img6"
         android:layout_height="@dimen/img6"
-        android:src="@drawable/logowide"
+        android:src="@drawable/mastervidyalogo"
         />
 
 

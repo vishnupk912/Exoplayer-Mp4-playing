@@ -258,7 +258,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 //        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -272,6 +272,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_online_player);
 
         Intent intent = getIntent();
+        videoId=intent.getStringExtra("videoId");
         videoUrl = intent.getStringExtra("video_url");
         videoName = intent.getStringExtra("title");
         chaptername = intent.getStringExtra("chapter");
@@ -292,11 +293,15 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         textView_title = findViewById(R.id.titletv);
         textView_class = findViewById(R.id.tv2);
         textView_desc = findViewById(R.id.decsptv);
+
         dbconnector=new Dbconnector(this);
 
         textView_title.setText(videoName);
         textView_class.setText(subjectname + " | " + chaptername);
         textView_desc.setText(description);
+
+
+
 
 
         if (savedInstanceState != null) {
@@ -380,6 +385,8 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
         findViewById(R.id.img_back_player).setOnClickListener(this);
         downloadimage = findViewById(R.id.downloadimage);
         rvtvid = findViewById(R.id.rvtvid);
+        dbconnector=new Dbconnector(this);
+
 
 
         downloadimage.setOnClickListener(new View.OnClickListener() {
@@ -388,7 +395,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
 
 
 //
-//                if(dbconnector.Exists(videoId))
+//               if(dbconnector.dbHasData(videoId))
 //                {
 //                    Toast.makeText(OnlinePlayerActivity.this, "This video has already downloaded", Toast.LENGTH_SHORT).show();
 //                }
@@ -405,10 +412,11 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
                     videoModel.setSubjectname(subjectname);
                     videoModel.setChaptername(chaptername);
                     videoModel.setVideoName(videoName);
-
-
+                    videoModel.setDownloadkey(String.valueOf(videoUrl));
                     dbconnector.addvideo(videoModel);
 //
+
+
 //                }
 
 
@@ -441,6 +449,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
 
             case DOWNLOAD_START:
                 fetchDownloadOptions();
+
 
                 break;
 
@@ -475,6 +484,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
 
             case DOWNLOAD_COMPLETED:
                 Toast.makeText(this, "Already Downloaded, Delete from Downloaded video ", Toast.LENGTH_SHORT).show();
+
 
                 break;
         }
@@ -545,7 +555,7 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
             long bitrate = trackKey.getTrackFormat().bitrate;
             long getInBytes =  (bitrate * videoDurationInSeconds)/8;
             String getInMb = AppUtil.formatFileSize(getInBytes);
-            String videoResoultionDashSize =  " "+trackKey.getTrackFormat().width +"P";
+            String videoResoultionDashSize =  " "+trackKey.getTrackFormat().height +"P";
             optionsToDownload.add(i, videoResoultionDashSize);
 
 
@@ -675,10 +685,10 @@ public class OnlinePlayerActivity extends AppCompatActivity implements View.OnCl
 
         if (bundle != null)
         {
-            videoId = bundle.getString("video_id");
-            videoName = bundle.getString("video_name");
-            videoUrl = bundle.getString("video_url");
-            videoDurationInSeconds =bundle.getLong("video_duration");
+//            videoId = bundle.getString("video_id");
+//            videoName = bundle.getString("video_name");
+//            videoUrl = bundle.getString("video_url");
+//            videoDurationInSeconds =bundle.getLong("video_duration");
         }
 
 

@@ -8,6 +8,7 @@
     tools:context=".ui.Profile">
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ts48"
         android:background="@drawable/buttonshape9"
@@ -54,6 +55,33 @@
                 android:textColor="@color/dgrey2"
                 />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ts48"
+        android:background="@color/colorprimarydark"
+        android:gravity="center_vertical"
+        >
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/ts32"
+            android:layout_height="@dimen/ts32"
+            android:src="@drawable/ic_leftarrow"
+            android:layout_marginLeft="@dimen/ts12"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Profile"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppinsregular"
+            android:textSize="@dimen/sp16"
+            android:layout_marginLeft="@dimen/ts12"
+            />
+
+
 
     </LinearLayout>
 
@@ -110,7 +138,6 @@
                 android:id="@+id/nameid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vishnu P K"
                 android:textColor="@color/black"
                 android:fontFamily="@font/poppinsregular"
                 />
@@ -134,7 +161,6 @@
                 android:id="@+id/phonetv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="8137868762"
                 android:textColor="@color/black"
                 android:fontFamily="@font/poppinsregular"
                 />
@@ -156,9 +182,8 @@
 
             <TextView
                 android:id="@+id/addresstv"
-                android:layout_width="@dimen/img6"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Puthukulangara house po c poyyil,kannur kerala"
                 android:textColor="@color/black"
                 android:fontFamily="@font/poppinsregular"
                 />
@@ -180,9 +205,8 @@
 
             <TextView
                 android:id="@+id/boardtv"
-                android:layout_width="@dimen/img6"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CBSE"
                 android:textColor="@color/black"
                 android:fontFamily="@font/poppinsregular"
                 />

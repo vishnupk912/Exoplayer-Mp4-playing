@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
@@ -91,6 +92,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     ImageView image1;
     FrameLayout lay1;
     FrameLayout lay3,lay2,lay4;
+
 
 
     @Override
@@ -166,6 +168,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
 
         TextView tvNav1;
         LinearLayout chatlay,signoutlay,myprofile,mydownload;
+        LinearLayout myclass,home,report,payment;
         ImageView imgNav;
         chatlay=header.findViewById(R.id.chatlay);
         signoutlay=header.findViewById(R.id.signoutlay);
@@ -173,8 +176,45 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         myprofile=header.findViewById(R.id.myprofile);
         tvNav1=header.findViewById(R.id.tvNav1);
         mydownload=header.findViewById(R.id.mydownload);
+        myclass=header.findViewById(R.id.layclass);
+        home=header.findViewById(R.id.layhome);
+        report=header.findViewById(R.id.layreport);
+        payment=header.findViewById(R.id.laypayment);
 
 
+        payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(Homepage.this, Payments.class);
+                startActivity(intent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(Homepage.this, Homepage.class);
+                startActivity(intent);
+            }
+        });
+
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDrawer();
+                Intent intent=new Intent(Homepage.this, ReportClassActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        myclass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDrawer();
+                Intent intent=new Intent(Homepage.this, MyClass.class);
+                startActivity(intent);
+            }
+        });
         mydownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -501,8 +541,12 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
             }
         });
+
+
+
         requestQueue.add(jsonObjectRequest);
     }
 

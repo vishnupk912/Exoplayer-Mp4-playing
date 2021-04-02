@@ -150,9 +150,16 @@ public class DownloadedVideoAdapter extends RecyclerView.Adapter<DownloadedVideo
          videoModel =   AppUtil.getVideoDetail(download.request.id);
         videoModelList.add(videoModel);
 
-        if (!videoModelList.get(position).getVideoName().isEmpty()) {
-            holder.tvDownloadVideoTitle.setText(videoModel.getVideoName());
+        try {
+            if (!videoModelList.get(position).getVideoName().isEmpty()) {
+                holder.tvDownloadVideoTitle.setText(videoModel.getVideoName());
+            }
         }
+        catch (Exception e)
+        {
+
+        }
+
         holder.chapternametvtv.setText(videoModelList.get(position).getClassname()+"|"+videoModelList.get(position).getChaptername()+" | "+ videoModelList.get(position).getSubjectname());
 
 ////

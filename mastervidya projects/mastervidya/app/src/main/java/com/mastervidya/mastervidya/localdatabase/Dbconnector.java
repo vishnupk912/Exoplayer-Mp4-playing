@@ -24,9 +24,9 @@ public class Dbconnector extends SQLiteOpenHelper
     private static final String KEY_SUBJECT = "subject";
     private static final String KEY_CHAPTER = "chapter";
 
-
     private static final String KEY_VIDEONAME = "videoname";
     private static final String KEY_VIDEOURL = "videourl";
+    private  static final String KEY_DOWNLOAD="downloadkey";
 
 
     public Dbconnector(Context context) {
@@ -44,7 +44,8 @@ public class Dbconnector extends SQLiteOpenHelper
                 + KEY_SUBJECT + " TEXT,"
                 + KEY_CHAPTER + " TEXT,"
                 + KEY_VIDEONAME + " TEXT,"
-                + KEY_VIDEOURL + " TEXT"
+                + KEY_VIDEOURL + " TEXT,"
+                + KEY_DOWNLOAD + " TEXT"
                 + ")";
 
         sqLiteDatabase.execSQL(CREATE_CATEGORY_TABLE);
@@ -68,6 +69,7 @@ public class Dbconnector extends SQLiteOpenHelper
             values.put(KEY_CHAPTER, videoModel.getChaptername());
             values.put(KEY_VIDEOURL, videoModel.getVideoUrl());
             values.put(KEY_SUBJECT, videoModel.getSubjectname());
+            values.put(KEY_DOWNLOAD, videoModel.getDownloadkey());
             db.insert(TABLE_VIDEO, null, values);
             db.close();
         }
@@ -96,6 +98,7 @@ public class Dbconnector extends SQLiteOpenHelper
                     videoModel.setChaptername(cursor.getString(3));
                     videoModel.setVideoName(cursor.getString(4));
                     videoModel.setVideoUrl(cursor.getString(5));
+                    videoModel.setDownloadkey(cursor.getString(6));
 
 
 
@@ -143,17 +146,18 @@ public class Dbconnector extends SQLiteOpenHelper
         values.put(KEY_CHAPTER, videoModel.getChaptername());
         values.put(KEY_VIDEOURL, videoModel.getVideoUrl());
         values.put(KEY_SUBJECT, videoModel.getSubjectname());
+        values.put(KEY_DOWNLOAD, videoModel.getDownloadkey());
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(TABLE_VIDEO, values, KEY_ID + " = ?", new String[]{String.valueOf(videoModel.getVideoId())});
     }
 
-    public long Delete(String id)
+    public long Delete(String key)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         try
         {
 
-            return db.delete(TABLE_VIDEO,KEY_ID+" =?",new String[]{String.valueOf(id)});
+            return db.delete(TABLE_VIDEO,KEY_DOWNLOAD+" =?",new String[]{String.valueOf(key)});
 
         }catch (SQLException e)
         {
@@ -165,14 +169,22 @@ public class Dbconnector extends SQLiteOpenHelper
 
 
 
+    public boolean dbHasData(String searchKey) {
+        String query = "Select * from " + TABLE_VIDEO + " where " + KEY_ID + " = ?";
+        return getReadableDatabase().rawQuery(query, new String[]{searchKey}).moveToFirst();
+    }
+
     public boolean Exists(String user){
-        String selectQuery = "SELECT  * FROM " + TABLE_VIDEO;
+        String query = "Select * from " + TABLE_VIDEO + " where " + KEY_ID + " = ?";
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery(selectQuery, null);
+        Cursor res = db.rawQuery(query, null);
         int flag=0;
         while (res.moveToNext()){
             String id =res.getString(0);
-            if(id.equals(user)){
+
+            Log.d("parseid",id);
+            if("29".equals(user))
+            {
                 flag++;
             }
         }
@@ -184,7 +196,5 @@ public class Dbconnector extends SQLiteOpenHelper
             return true;
         }
     }
-
-
 
 }

@@ -197,6 +197,9 @@ public class DownloadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AdaptiveExoplayer.getInstance().getDownloadManager().removeDownload(download.request.id);
+//
+//                Dbconnector dbconnector=new Dbconnector(DownloadActivity.this);
+//                dbconnector.Delete(download.request.id);
 
                 dialog.dismiss();
             }

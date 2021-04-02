@@ -33,12 +33,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ChapterWiseReport"></activity>
+        <activity android:name=".ui.QuizLink">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.mastervidya.com"
+                    android:scheme="http"></data>
+            </intent-filter>
+
+
+        </activity>
+        <activity android:name=".ui.ChapterWiseReport" />
         <activity android:name=".ui.ReportSubjectActivity" />
         <activity android:name=".ui.ReportClassActivity" />
         <activity android:name=".ui.ViewAnswer" />
         <activity android:name=".ui.QuizResult" />
-        <activity android:name=".ui.Quizinfo" />
+        <activity android:name=".ui.Quizinfo">
+        </activity>
         <activity android:name=".ui.QuizaAcitivity" />
         <activity android:name=".ui.SpecialVideoListing" />
         <activity android:name=".ui.SpecialStudy_Chapters" />

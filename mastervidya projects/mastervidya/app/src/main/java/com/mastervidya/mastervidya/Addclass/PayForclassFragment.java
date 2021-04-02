@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.snackbar.Snackbar;
@@ -411,6 +412,26 @@ public class PayForclassFragment extends Fragment implements PaymentResultListen
             }
         });
 
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError
+            {
+
+            }
+        });
+
+
+
         requestQueue.add(jsonObjectRequest);
     }
 
@@ -779,9 +800,28 @@ public class PayForclassFragment extends Fragment implements PaymentResultListen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+            dialog_progress.dismiss();
+            }
+        });
+
+        jsonObjectRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError
+            {
 
             }
         });
+
 
         requestQueue.add(jsonObjectRequest);
 

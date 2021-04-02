@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -83,6 +84,7 @@ public class PaymentPage extends AppCompatActivity implements PaymentResultListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_page);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         back=findViewById(R.id.back);
 
@@ -778,7 +780,7 @@ public class PaymentPage extends AppCompatActivity implements PaymentResultListe
             public void onResponse(JSONObject jsonObject) {
                 try {
                     String status = jsonObject.getString("status");
-                    if (status.contains("success")) {
+                    if (status.equals("success")) {
                         etagentcode.setVisibility(View.GONE);
                         etotpcode.setVisibility(View.VISIBLE);
                         submitlay.setVisibility(View.GONE);
@@ -825,7 +827,7 @@ public class PaymentPage extends AppCompatActivity implements PaymentResultListe
             public void onResponse(JSONObject jsonObject) {
                 try {
                     String status = jsonObject.getString("status");
-                    if (status.contains("verified")) {
+                    if (status.equals("verified")) {
                         Intent intent = new Intent(PaymentPage.this, TransactionActivity.class);
                         intent.putExtra("key", sessionHandler.getuniquekey());
                         intent.putExtra("id", id);
@@ -922,7 +924,7 @@ public class PaymentPage extends AppCompatActivity implements PaymentResultListe
             public void onResponse(JSONObject jsonObject) {
                 try {
                     String status = jsonObject.getString("status");
-                    if (status.contains("verified")) {
+                    if (status.equals("verified")) {
                         Toast.makeText(PaymentPage.this, "success congrats ", Toast.LENGTH_SHORT).show();
                     } else {
 

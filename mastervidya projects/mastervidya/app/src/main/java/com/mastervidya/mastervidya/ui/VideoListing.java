@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ public class VideoListing extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_listing);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         back=findViewById(R.id.back);
         dialog_progress = new Dialog(this);
@@ -90,12 +92,13 @@ public class VideoListing extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent1=new Intent(VideoListing.this,Quizinfo.class);
+                intent1.putExtra("chap_id",chapid);
                 startActivity(intent1);
             }
         });
         getcustomerdetails();
         getdata();
-
+        quizinfo();
     }
 
     public void getdata()
@@ -232,6 +235,68 @@ public class VideoListing extends AppCompatActivity {
 
         }
 
+    }
+
+
+    public void quizinfo()
+    {
+
+
+        JSONObject json = new JSONObject();
+        try
+        {
+            json.put("key",sessionHandler.getuniquekey());
+            json.put("id",id);
+            json.put("chapter_id",chapid);
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.POST, Url.quiz_info, json, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                dialog_progress.dismiss();
+                Log.d("response",jsonObject.toString());
+                try {
+                    String status=jsonObject.getString("status");
+                    if(status.contains("success"))
+                    {
+
+
+                        JSONArray jsonArray=jsonObject.getJSONArray("data");
+
+                        if(jsonArray.length()==0)
+                        {
+                            linearLayout_Quiz.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            linearLayout_Quiz.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
     }
 
 }
